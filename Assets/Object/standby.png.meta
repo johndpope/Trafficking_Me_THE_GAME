@@ -1,0 +1,223 @@
+fileFormatVersion: 2
+guid: 4bf3f42404cfaa84297fc7401ec35984
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: standby_0
+    21300002: standby_1
+    21300004: standby_2
+    21300006: standby_3
+    21300008: standby_4
+    21300010: standby_5
+    21300012: standby_6
+    21300014: standby_7
+    21300016: standby_8
+    21300018: standby_9
+    21300020: standby_10
+    21300022: standby_11
+    21300024: standby_12
+    21300026: standby_13
+    21300028: standby_14
+    21300030: standby_15
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: standby_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: standby_1
+      rect:
+        serializedVersion: 2
+        x: 565
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: standby_2
+      rect:
+        serializedVersion: 2
+        x: 1130
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: standby_3
+      rect:
+        serializedVersion: 2
+        x: 1695
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: standby_4
+      rect:
+        serializedVersion: 2
+        x: 2260
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: standby_5
+      rect:
+        serializedVersion: 2
+        x: 2825
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: standby_6
+      rect:
+        serializedVersion: 2
+        x: 3390
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: standby_7
+      rect:
+        serializedVersion: 2
+        x: 3955
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: standby_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: standby_9
+      rect:
+        serializedVersion: 2
+        x: 565
+        y: 0
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: standby_10
+      rect:
+        serializedVersion: 2
+        x: 1130
+        y: 0
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: standby_11
+      rect:
+        serializedVersion: 2
+        x: 1695
+        y: 0
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: standby_12
+      rect:
+        serializedVersion: 2
+        x: 2260
+        y: 0
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: standby_13
+      rect:
+        serializedVersion: 2
+        x: 2825
+        y: 0
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: standby_14
+      rect:
+        serializedVersion: 2
+        x: 3390
+        y: 0
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: standby_15
+      rect:
+        serializedVersion: 2
+        x: 3955
+        y: 0
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
