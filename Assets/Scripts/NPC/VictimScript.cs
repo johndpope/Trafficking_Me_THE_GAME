@@ -28,6 +28,13 @@ public class VictimScript : MonoBehaviour {
     public float radiusGround = 0.2f;
     public bool isClimb;
     private GameObject[] allVictim;
+    public int ID =69;
+    private float distancetoPlayer;
+    void Awake()
+    {   
+
+    }
+
 	void Start () {
         anim = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
@@ -41,6 +48,7 @@ public class VictimScript : MonoBehaviour {
         {
             Physics2D.IgnoreCollision(collider2D, allVictim[i].collider2D);
         }
+        
 	}
 	
 	// Update is called once per frame
@@ -48,6 +56,8 @@ public class VictimScript : MonoBehaviour {
         if (popup.helpStatus)
         {
             popup.gameObject.SetActive(false);
+
+            DontDestroyOnLoad(gameObject);
 
             isinsideLadder = Physics2D.OverlapCircle(ground.position, radiusGround, whatisLadder);
 
@@ -149,11 +159,11 @@ public class VictimScript : MonoBehaviour {
         //RaycastHit2D hitSomething = Physics2D.Raycast(transform.position, direction, 8.0f, layermasks);
 
         Vector2 vector = player.transform.position - transform.position;
-        float distanceToPlayer = Vector2.SqrMagnitude(vector);
+        distancetoPlayer = Vector2.SqrMagnitude(vector);
 
         
 
-        if (distanceToPlayer <= 60) {
+        if (distancetoPlayer <= 60) {
             onSight = true;
             if (!player.GetComponent<CharacterController>().isClimb)
             {
@@ -249,13 +259,17 @@ public class VictimScript : MonoBehaviour {
         }
         if (onSight)
         {
-            
-            if (playerMoveUp || playerMoveDown)
+            if (distancetoPlayer < 0.5)
+            {
+                playerMoveUp = false;
+                playerMoveDown = false;
+            }
+            if ((playerMoveUp || playerMoveDown) && distancetoPlayer > 0.5)
             {
                 
                 
                 
-                if (!isFindladder && currentladder == null)
+                if (!isFindladder)
                 {
                     FindLadder();
                     isFindladder = true;
@@ -353,18 +367,7 @@ public class VictimScript : MonoBehaviour {
         allLadder = GameObject.FindGameObjectsWithTag("Ladder");
         float result = 300;
         float positionOfOject;
-        if (playerMoveDown)
-        {
-            positionOfOject = transform.position.x;
-        }
-        else if (playerMoveUp)
-        {
-            positionOfOject = player.transform.position.x;
-        }
-        else
-        {
-            positionOfOject = player.transform.position.x;
-        }
+        positionOfOject = player.transform.position.x;
         for (int i = 0; i < allLadder.Length; i++)
         {
             float distance = Mathf.Abs(allLadder[i].transform.position.x - positionOfOject);
@@ -375,6 +378,24 @@ public class VictimScript : MonoBehaviour {
             }
         }
     }
-    
+    void OnLevelWasLoaded(int level)
+    {
+        //find other victim
+        playerMoveDown = false;
+        playerMoveUp = false;
+        if (popup.helpStatus == true)
+        {
+            GameObject[] tempList = GameObject.FindGameObjectsWithTag("Victim");
+            for (int i = 0; i < tempList.Length; i++)
+            {
+                if (tempList[i].GetComponent<VictimScript>().popup.helpStatus == false && tempList[i].GetComponent<VictimScript>().ID == ID)
+                {
+                    Destroy(tempList[i]);
+                    break;
+                }
+            }
+        }
+        
+    }
     
 }
