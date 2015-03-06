@@ -70,9 +70,10 @@ public class GameController : MonoBehaviour {
             questManager.setQuestStatus(currentQuest, currentQuest.QuestStatus);
         }
     }
-    public bool IsItemInQuest(int MapID, Spawn position)
+    public bool IsItemInQuest(int MapID, Spawn position, out string item)
     {
         bool haveItem = false;
+        item = "";
         if (currentQuest != null)
         {
             if (currentQuest.GetType() == typeof(HelpingQuest))
@@ -82,18 +83,20 @@ public class GameController : MonoBehaviour {
             else if (currentQuest.GetType() == typeof(FindingQuest))
             {
                 FindingQuest temp = (FindingQuest)currentQuest;
-                haveItem = temp.HaveItem(MapID, position);
-                
+                haveItem = temp.HaveItem(MapID, position, out item);
+
             }
             else if (currentQuest.GetType() == typeof(BossQuest))
             {
 
             }
-            else if (currentQuest.GetType() == typeof(MapQuest)){
-                
-                
+            else if (currentQuest.GetType() == typeof(MapQuest))
+            {
+
+
             }
         }
+            
         return haveItem;
     }
     public bool isAlreadyHaveItem(int MapID, Spawn position)

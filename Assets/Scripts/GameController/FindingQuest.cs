@@ -29,9 +29,10 @@ public class FindingQuest : Quest {
         }
     }
 
-    public bool HaveItem(int mapID, Spawn position)
+    public bool HaveItem(int mapID, Spawn position, out string item)
     {
         bool result = false;
+        item ="";
         if (objectiveLocation.ContainsKey(mapID))
         {
             for (int i = 0; i < objectiveLocation[mapID].Count; i++)
@@ -39,6 +40,7 @@ public class FindingQuest : Quest {
                 if (objectiveLocation[mapID][i].getPositions() == position)
                 {
                     result = true;
+                    item = objectiveLocation[mapID][i].getPRefab();
                     break;
                 }
             }

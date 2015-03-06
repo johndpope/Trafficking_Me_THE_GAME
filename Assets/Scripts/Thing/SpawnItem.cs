@@ -9,10 +9,11 @@ public class SpawnItem : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         system = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
-        if(system.IsItemInQuest(mapID,position)){
+        string items = "";
+        if(system.IsItemInQuest(mapID,position, out items)){
             if (!system.isAlreadyHaveItem(mapID, position))
             {
-                GameObject item = (GameObject)Instantiate(Resources.Load("Prefabs/box"), transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(0, 0, 0));
+                GameObject item = (GameObject)Instantiate(Resources.Load("Prefabs/"+items), transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(0, 0, 0));
                 box a = item.GetComponent<box>();
                 a.mapID = mapID;
                 a.position = position;
