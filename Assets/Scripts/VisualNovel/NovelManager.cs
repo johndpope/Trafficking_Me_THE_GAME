@@ -13,7 +13,8 @@ public class NovelManager : MonoBehaviour {
     private GameController system;
     public enum Storys
     {
-        introstory
+        introstory,
+        missionone
     }
     public Storys selectStory;
 	void Start () {
@@ -33,14 +34,20 @@ public class NovelManager : MonoBehaviour {
         {
             button.setData(currentStory.getConversation(path), currentStory.getNameCharacter(path)
                 ,currentStory.getCharacterPicture(path),currentStory.getCharacterPosition(path)
-                ,currentStory.getBackground(path));
+                ,currentStory.getBackground(path),currentStory.getMusicBackground(path)
+                ,currentStory.getCharacterMusic(path));
         }
     }
     public void checkStory()
     {
         if (button.currentnumberText == button.getMaxConversation() + 1)
                 {
+                    if (currentStory.GetHaveQuestinthelast())
+                    {
+                        system.changeCurrentMission(currentStory.GetQuestMissioninLast());
+                    }
                     gameObject.SetActive(false);
+                    Time.timeScale = 1;
                 }
         if (button.currentnumberText == button.getMaxConversation())
         {
@@ -77,6 +84,7 @@ public class NovelManager : MonoBehaviour {
     }
     public void Initial()
     {
+        Time.timeScale = 0;
         system = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
         buttonway1.SetActive(false);
         buttonway2.SetActive(false);
@@ -87,7 +95,8 @@ public class NovelManager : MonoBehaviour {
             //Debug.Log(currentStory.getCharacterPicture(path).Length + " " + currentStory.getCharacterPosition(path)+" "+ );
             button.setData(currentStory.getConversation(path), currentStory.getNameCharacter(path),
            currentStory.getCharacterPicture(path), currentStory.getCharacterPosition(path)
-               , currentStory.getBackground(path));   
+               , currentStory.getBackground(path),currentStory.getMusicBackground(path)
+                ,currentStory.getCharacterMusic(path));   
         }
        
     }
@@ -96,6 +105,7 @@ public class NovelManager : MonoBehaviour {
         switch (n)
         {
             case Storys.introstory: currentStory = new IntroStory(); break;
+            case Storys.missionone: currentStory = new MissionOne(); break;
             default: currentStory = new IntroStory(); break;
         }
     }

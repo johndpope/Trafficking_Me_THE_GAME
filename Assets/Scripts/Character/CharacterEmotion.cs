@@ -8,7 +8,7 @@ public enum StatList
 public class CharacterEmotion : MonoBehaviour {
     
     
-    CharacterDetail characterDetail;
+    public CharacterDetail characterDetail;
     CharacterController player;
     public float maxNormalCoundown =20;
     public float maxInverseCoundown = 10;
@@ -133,6 +133,21 @@ public class CharacterEmotion : MonoBehaviour {
         }
         //Debug.Log("Time" + currentTime+ "Time2 "+ currentTimeE);
     }
+
+    public void updateTrustnessStat(int stat)
+    {
+        int temp = characterDetail.getTrustnessStat();
+        if (temp + stat > 0)
+        {
+            temp += stat;
+        }
+        else
+        {
+            temp = 0;
+        }
+        characterDetail.setTrustnessStat(temp);
+    } 
+
     public int getTrustiness()
     {
         return characterDetail.getTrustnessStat();

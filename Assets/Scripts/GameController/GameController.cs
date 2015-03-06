@@ -12,22 +12,27 @@ public class GameController : MonoBehaviour {
     private float alertTime;
     public EventHandling eventHandling;
     public float persentageEnemy;
+    public float persentageVictim;
     public float persentageAddional;
     CharacterEmotion player;
 
     public string currentMap;
     public string previousMap;
+
+    private float enemyDelayTime = 1.5f; 
+    private bool enemyInActive;
 	void Awake () {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterEmotion>();
         questManager = new QuestManager();
         thingManager = new ThingManager();
-        currentQuest = questManager.getCurrentQuest(0); //let default quest is mission 1 
-
+        currentQuest = questManager.getCurrentQuest(0); //let default quest is mission 0 
         currentMap = Application.loadedLevelName;
+        
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
+        //Debug.Log(currentQuest.QuestID);
 
         if (player.renderer.enabled == false)
         {
@@ -41,13 +46,16 @@ public class GameController : MonoBehaviour {
         gameTime += Time.deltaTime;
         if (isAlert)
         {
-            Timealtert();
+            Timealert();
             //Debug.Log("alert!! " + alertTime);
         }
-        else if (player.renderer.enabled)
+
+        //delay time before enemy appear on the door
+        if (enemyInActive)
         {
-            //GameObject.FindGameObjectWithTag("Enemy").SendMessage("UnAlert", true);
+            EnemyDoorDelay();
         }
+        
 	}
 
     void UpdateQuestStatus()
@@ -62,7 +70,7 @@ public class GameController : MonoBehaviour {
             questManager.setQuestStatus(currentQuest, currentQuest.QuestStatus);
         }
     }
-    public bool GetItemInQuest(int key)
+    public bool IsItemInQuest(int MapID, Spawn position)
     {
         bool haveItem = false;
         if (currentQuest != null)
@@ -74,7 +82,8 @@ public class GameController : MonoBehaviour {
             else if (currentQuest.GetType() == typeof(FindingQuest))
             {
                 FindingQuest temp = (FindingQuest)currentQuest;
-                haveItem = temp.HaveItem(key);
+                haveItem = temp.HaveItem(MapID, position);
+                
             }
             else if (currentQuest.GetType() == typeof(BossQuest))
             {
@@ -87,7 +96,7 @@ public class GameController : MonoBehaviour {
         }
         return haveItem;
     }
-    public bool isAlreadyHaveItem(int key)
+    public bool isAlreadyHaveItem(int MapID, Spawn position)
     {
         bool haveItem = false;
         if (currentQuest != null)
@@ -99,7 +108,7 @@ public class GameController : MonoBehaviour {
             else if (currentQuest.GetType() == typeof(FindingQuest))
             {
                 FindingQuest temp = (FindingQuest)currentQuest;
-                haveItem = temp.IsCollect(key);
+                haveItem = temp.IsCollect(MapID,position);
             }
             else if (currentQuest.GetType() == typeof(BossQuest))
             {
@@ -114,8 +123,25 @@ public class GameController : MonoBehaviour {
         return haveItem;
     }
 
+    public void SetHaveItem(int key, Spawn position)
+    {
+        if (currentQuest != null && currentQuest.GetType() == typeof(FindingQuest))
+        {
+            FindingQuest temp = (FindingQuest)currentQuest;
+            temp.setIsCollect(key,position);
+            currentQuest = temp;
+
+            //if all item collected, change to destination quest
+            if (temp.allItemCollected())
+            {
+                
+            }
+        }
+    }
+
     public bool IsArrive(int key)
     {
+
         bool arrived = false;
 
         if (currentQuest.GetType() == typeof(MapQuest))
@@ -126,7 +152,7 @@ public class GameController : MonoBehaviour {
 
         return arrived;
     }
-    public void Timealtert()
+    public void Timealert()
     {
         if (alertTime > 0)
         {
@@ -142,8 +168,8 @@ public class GameController : MonoBehaviour {
     public void stopEnemy()
     {
 
-        GameObject[] enemy = GameObject.FindGameObjectsWithTag("enemy");
-        Debug.Log("sum of enemy"+enemy.Length);
+        GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+        //Debug.Log("sum of enemy"+enemy.Length);
         for (int i = 0; i < enemy.Length; i++)
         {
             enemy[i].SendMessage("stopEnemyfindPlayer");
@@ -160,7 +186,9 @@ public class GameController : MonoBehaviour {
         if (currentQuest != null)
         {
             temp = currentQuest.haveConversationMap(mapID);
+            
         }
+        //Debug.Log(temp);
         return temp;
     }
     public bool HavetoSummonEnemy()
@@ -183,7 +211,7 @@ public class GameController : MonoBehaviour {
             tempPersentage = persentageEnemy;
         }
         int random = Random.Range(0, 100);
-        Debug.Log(random+" "+Random.seed);
+        //Debug.Log(random+" "+Random.seed);
         if (random < tempPersentage)
         {
             result = true;
@@ -194,6 +222,40 @@ public class GameController : MonoBehaviour {
         }        
             return result;
     }
+
+    public bool HaveToSummonVictim()
+    {
+
+        bool result = false;
+        float tempPersentage = 0;
+        if (player.getTrustiness() <= 0)
+        {
+            if (persentageVictim + persentageAddional >= 100)
+            {
+                tempPersentage = 100;
+            }
+            else
+            {
+                tempPersentage = persentageAddional + persentageVictim;
+            }
+        }
+        else
+        {
+            tempPersentage = persentageVictim;
+        }
+        int random = Random.Range(0, 100);
+        //Debug.Log(random+" "+Random.seed);
+        if (random < tempPersentage)
+        {
+            result = true;
+        }
+        else
+        {
+            result = false;
+        }
+        return result;
+    }
+
     public void setHaveConversation(int mapID,bool isFinish)
     {
         if (currentQuest != null)
@@ -224,9 +286,84 @@ public class GameController : MonoBehaviour {
         }
     }
 
+
     void OnLevelWasLoaded(int level)
     {
         previousMap = currentMap;
         currentMap = Application.loadedLevelName;
+
+        RandomSummonVictim();
+        RandomSummonEnemy();
+
+        checkMapQuestArrive();
+        
+    }
+
+    void checkMapQuestArrive()
+    {
+        if (currentQuest != null && currentQuest.GetType() == typeof(MapQuest))
+        {
+            if (IsArrive(Application.loadedLevel))
+            {
+                Debug.Log("map quest complete");
+            }
+        }
+    }
+
+    public void EnemyNewScreen(bool n)
+    {
+        enemyDelayTime = 1.5f;
+        enemyInActive = true;
+    }
+
+    public void EnemyDoorDelay()
+    {
+        if (enemyDelayTime > 0)
+        {
+            enemyDelayTime -= Time.deltaTime;
+        }
+        else
+        {
+            GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+            for (int i = 0; i < enemy.Length; i++)
+            {
+                enemy[i].renderer.enabled = true;
+                enemy[i].GetComponent<EnemyScript>().inActive = false;
+            }
+            
+            enemyInActive = false;
+        }
+    }
+
+    public void RandomSummonVictim()
+    {
+        GameObject[] allSpawnPoint = GameObject.FindGameObjectsWithTag("SpawnPointVictim");
+
+        for (int i = 0; i < allSpawnPoint.Length; i++)
+        {
+            bool temp = HaveToSummonVictim();
+            if (temp)
+            {
+                GameObject victim = (GameObject)Instantiate(Resources.Load("Prefabs/Victim"), allSpawnPoint[0].transform.position + new Vector3(0,1,0), Quaternion.Euler(0, 0, 0));
+                victim.GetComponent<VictimScript>().ID = allSpawnPoint[0].GetComponent<SpawnScript>().ID;
+            }
+        }
+    }
+
+    public void RandomSummonEnemy()
+    {
+        GameObject[] allSpawnPoint = GameObject.FindGameObjectsWithTag("SpawnPointEnemy");
+        
+        for (int i = 0; i < allSpawnPoint.Length; i++)
+        {
+            bool temp = HavetoSummonEnemy();
+            if (temp)
+            {
+                GameObject enemy = (GameObject)Instantiate(Resources.Load("Prefabs/Enemy"), allSpawnPoint[0].transform.position + new Vector3(0, 1, 0), Quaternion.Euler(0, 0, 0));
+                enemy.GetComponent<EnemyScript>().spawnScreen = Application.loadedLevelName;
+                enemy.GetComponent<EnemyScript>().ID = allSpawnPoint[0].GetComponent<SpawnScript>().ID;
+            }
+
+        }
     }
 }

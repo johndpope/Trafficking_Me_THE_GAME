@@ -28,7 +28,7 @@ public class VictimScript : MonoBehaviour {
     public float radiusGround = 0.2f;
     public bool isClimb;
     private GameObject[] allVictim;
-    public int ID =69;
+    public string ID;
     private float distancetoPlayer;
     void Awake()
     {   
@@ -152,6 +152,15 @@ public class VictimScript : MonoBehaviour {
             rigidbody2D.isKinematic = true;
         }
     }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if(col.gameObject.tag == "Enemy"){
+            Destroy(gameObject);
+            player.GetComponent<CharacterEmotion>().updateTrustnessStat(-1);
+        }
+    } 
+
 
     void DetectPlayer()
     {

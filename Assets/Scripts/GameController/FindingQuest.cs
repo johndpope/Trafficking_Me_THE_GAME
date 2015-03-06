@@ -5,79 +5,146 @@ using System.Collections.Generic;
 public class FindingQuest : Quest {
 
 
-    private List<List<int>> objectiveLocation; //map that contain this quest
+    private Dictionary<int, List<ItemQuest>> objectiveLocation; //map that contain this quest
+    // item list before random 
+    private List<ItemQuest> items;
+    private List<int> map;
     public FindingQuest(int questID, string questName, string questDescription, string questStatus, int score) : base(questID, questName, questDescription, questStatus, score) 
     {
-        objectiveLocation = new List<List<int>>();
+        objectiveLocation = new Dictionary<int, List<ItemQuest>>();
+        items = new List<ItemQuest>();
+        map = new List<int>();
     }
     // 1= true;
     //2 = false;
-    public void addObjectiveLocation(int itemID, int mapID, int isCollect)
+    public void addItemQuest(ItemQuest item)
     {
-        /*
-         * {itemID,mapID,isCollect},
-         * {itemID,mapID,isCollect}
-         */
-        List<int> temp = new List<int>();
-        temp.Add(itemID);
-        temp.Add(mapID);
-        temp.Add(isCollect);
-        objectiveLocation.Add(temp);
+        items.Add(item);
     }
-    //keyID = mapID
-    public void getItemLocation(int keyID, out int itemID, out int mapID)
+    public void addMap(int[] mapID)
     {
-        int tempItem =0;
-        int tempMap =0;
-        for (int i = 0; i < objectiveLocation.Count; i++)
+        for (int i = 0; i < mapID.Length; i++)
         {
-            if (objectiveLocation[i][1] == keyID)
-            {
-                tempItem = objectiveLocation[i][0];
-                tempMap = objectiveLocation[i][1];
-                break;
-            }
+            map.Add(mapID[i]);
         }
-        itemID = tempItem;
-        mapID = tempMap;
     }
 
-    public bool HaveItem(int keyID)
+    public bool HaveItem(int mapID, Spawn position)
     {
         bool result = false;
-
-        for (int i = 0; i < objectiveLocation.Count; i++)
+        if (objectiveLocation.ContainsKey(mapID))
         {
-            if (objectiveLocation[i][0] == keyID)
+            for (int i = 0; i < objectiveLocation[mapID].Count; i++)
             {
-                result = true;
-                break;
-            }
-        }
-
-            return result;
-    }
-    public bool IsCollect(int keyID)
-    {
-        bool result = false;
-        for (int i = 0; i < objectiveLocation.Count; i++)
-        {
-            if (objectiveLocation[i][0] == keyID)
-            {
-                if (objectiveLocation[i][0] == 1)
+                if (objectiveLocation[mapID][i].getPositions() == position)
                 {
                     result = true;
+                    break;
                 }
-                else
+            }
+                
+        }
+        return result;
+    }
+    public bool IsCollect(int mapID, Spawn position)
+    {
+        bool result = false;
+        if (objectiveLocation.ContainsKey(mapID))
+        {
+            for (int i = 0; i < objectiveLocation[mapID].Count; i++)
+            {
+                if (objectiveLocation[mapID][i].getPositions() == position)
                 {
-                    result = false;
+                    result = objectiveLocation[mapID][i].getIsCollected();
+                    break;
                 }
-                break;
             }
         }
         return result;
     }
 
     
+
+    public void randomItems()
+    {
+        while (items.Count >0 && map.Count >0)
+        {
+            int randomMap = Random.Range(0, map.Count);
+            
+            //Debug.Log("randomMap" + randomMap);
+            if (objectiveLocation.ContainsKey(map[randomMap]))
+            {
+
+                if (objectiveLocation[map[randomMap]].Count < 2)
+                {
+                    
+                    int randomItem = Random.Range(0, items.Count);
+                    ItemQuest temp = items[randomItem];
+                    for (int i = 0; i < objectiveLocation[map[randomMap]].Count; i++)
+                    {
+                        
+                        if (objectiveLocation[map[randomMap]][i].getPositions() == Spawn.one)
+                        {
+                            temp.setPositions(Spawn.two);
+                            break;
+                        }
+                    }
+                    objectiveLocation[map[randomMap]].Add(temp);
+                    map.Remove(randomMap);
+                    items.Remove(items[randomItem]);
+                }
+            }
+            else
+            {
+                
+                int randomItem = Random.Range(0, items.Count);
+                objectiveLocation.Add(map[randomMap], new List<ItemQuest>());
+                ItemQuest temp = items[randomItem];
+                objectiveLocation[map[randomMap]].Add(temp);
+                items.Remove(items[randomItem]);
+
+            }
+        }
+        foreach (KeyValuePair<int, List<ItemQuest>> pair in objectiveLocation)
+        {
+            
+            for (int i = 0; i < pair.Value.Count; i++)
+            {
+                Debug.Log(pair.Key + " " + pair.Value[i].getItemID() + " " + pair.Value[i].getPositions());
+            }
+        }
+    }
+    public void setIsCollect(int mapID, Spawn position)
+    {
+        if(objectiveLocation.ContainsKey(mapID)){
+            for (int i = 0; i < objectiveLocation[mapID].Count; i++)
+            {
+                if (objectiveLocation[mapID][i].getPositions() == position)
+                {
+                    Debug.Log("successful");
+                    objectiveLocation[mapID][i].setIsCollected(true);
+                }
+                
+            }
+        }
+        
+    }
+
+    public bool allItemCollected()
+    {
+        bool result = true;
+        
+        foreach(KeyValuePair<int,List<ItemQuest>> pair in objectiveLocation){
+            for (int i = 0; i < pair.Value.Count; i++)
+            {
+                if(pair.Value[i].getIsCollected() == false){
+                    result = false;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
 
 }

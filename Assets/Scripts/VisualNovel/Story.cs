@@ -16,7 +16,11 @@ public class Story {
     private Dictionary<int,List<string>> background;
     private Dictionary<int, List<List<string>>> characterPicture;
     private Dictionary<int, List<List<Position>>> characterPosition;
+    private Dictionary<int, List<string>> musicBackground;
+    private Dictionary<int, List<string>> soundCharacter;
     private List<List<int>> answer;
+    private bool haveQuestIntheLast;
+    private int questMissioninlast;
 	// Use this for initialization
     public Story(string ID, string name,string des)
     {
@@ -30,6 +34,8 @@ public class Story {
         characterPicture = new Dictionary<int, List<List<string>>>();
         characterPosition = new Dictionary<int, List<List<Position>>>();
         background = new Dictionary<int, List<string>>();
+        musicBackground = new Dictionary<int, List<string>>();
+        soundCharacter = new Dictionary<int, List<string>>();
 
     }
     public string getID(){
@@ -43,7 +49,7 @@ public class Story {
     {
         return des;
     }
-    public void addConversation(int n,string name, string context, string background,string[] character,Position[] position)
+    public void addConversation(int n,string name, string context, string background,string[] character,Position[] position, string musicBackground,string characterMusic)
     {
         List<string> checkDictionary;
         if(!text.TryGetValue(n,out checkDictionary)){
@@ -84,6 +90,8 @@ public class Story {
             characterPicture[n].Add(temp1);
             characterPosition[n].Add(temp2);
         }
+        addMusicBackground(n, musicBackground);
+        addSoundCharacter(n, characterMusic);
     }
     public void addChoices(int n, string choice)
     {
@@ -197,5 +205,57 @@ public class Story {
             result = background[n].ToArray();
         }
         return result;
+    }
+    void addSoundCharacter(int i, string n)
+    {
+        if (!soundCharacter.ContainsKey(i))
+        {
+            soundCharacter.Add(i,new List<string>());
+            soundCharacter[i].Add(n);
+        }else{
+            soundCharacter[i].Add(n);
+        }
+    }
+    void addMusicBackground(int i, string n)
+    {
+        if (!musicBackground.ContainsKey(i))
+        {
+            musicBackground.Add(i, new List<string>());
+            musicBackground[i].Add(n);
+        }
+        else
+        {
+            musicBackground[i].Add(n);
+        }
+    }
+    public string[] getMusicBackground(int i)
+    {
+        if (musicBackground.ContainsKey(i))
+        {
+            return musicBackground[i].ToArray();
+        }else
+            return new string[1];
+    }
+    public string[] getCharacterMusic(int i)
+    {
+        if (soundCharacter.ContainsKey(i))
+        {
+            return soundCharacter[i].ToArray();
+        }
+        else
+            return new string[1]; 
+    }
+    public void setHaveQuestinlastTime(bool haveQuest, int mission)
+    {
+        haveQuestIntheLast = haveQuest;
+        questMissioninlast = mission;
+    }
+    public bool GetHaveQuestinthelast()
+    {
+        return haveQuestIntheLast;
+    }
+    public int GetQuestMissioninLast()
+    {
+        return questMissioninlast;
     }
 }

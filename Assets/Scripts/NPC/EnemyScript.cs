@@ -15,14 +15,14 @@ public class EnemyScript : MonoBehaviour
 
     float faceDirection = -1.0f; //default face left
     Vector2 direction = Vector2.right;
-    private bool isAttackEnemy;
+    public bool isAttackEnemy;
     private Transform currentladder;
     private bool EnemyMoveup;
     public LayerMask layermasks;
     private Vector2 radarVector;
     private bool radarRight;
     private bool checkInsideLadder;
-    private GameObject[] allLadder;
+    //private GameObject[] allLadder;
     private bool isFindladder;
     private bool isinsideLadder;
     public LayerMask whatisLadder;
@@ -37,7 +37,15 @@ public class EnemyScript : MonoBehaviour
     private bool isfromanomap;
     private bool originalUp;
     private bool originalDown;
+    public string ID;
+    public bool inActive;
+    public string spawnScreen;
+    private Transform currentDoor;
+    private bool sameYAxis; //is enemy in the same y axis as door
+    private bool goToDoorFromLadder;
 
+    private bool doorladderUp;
+    private bool doorladderDown;
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -54,63 +62,129 @@ public class EnemyScript : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-
-        if (!isAttackEnemy)
+        if (inActive)
         {
+            //do nothing
             Physics2D.IgnoreCollision(player.collider2D, collider2D);
+            
         }
         else
         {
-            Physics2D.IgnoreCollision(player.collider2D, collider2D, false);
+            //when not find player and enemy not spawn on this scene
+            if (!isAttackEnemy && spawnScreen != Application.loadedLevelName)
+            {
+                FindDoor();
+                if (!isClimb)
+                {
+                    transform.Translate(new Vector2(speed * faceDirection * Time.deltaTime, rigidbody2D.velocity.y));
+                }
+                if (sameYAxis) //go to door
+                {
+                    if (faceDirection > 0 && transform.position.x > currentDoor.position.x)
+                    {
+                        faceDirection = -1.0f;
+                        Flip();
+
+                    }
+                    else if (faceDirection < 0 && transform.position.x < currentDoor.position.x)
+                    {
+                        faceDirection = 1.0f;
+                        Flip();
+
+                    }
+                }
+                else //go to ladder instead of door
+                {
+                    if(currentladder != null){
+                        //Debug.Log(currentladder.position.x);
+                        if (faceDirection > 0 && transform.position.x > currentladder.position.x)
+                        {
+                            faceDirection = -1.0f;
+                            Flip();
+
+                        }
+                        else if (faceDirection < 0 && transform.position.x < currentladder.position.x)
+                        {
+                            faceDirection = 1.0f;
+                            Flip();
+
+                        }
+                    }
+                    else
+                    {
+                        FindLadder();
+                    }
+                }
+
+            }
+
+            if (!isAttackEnemy)
+            {
+                Physics2D.IgnoreCollision(player.collider2D, collider2D);
+            }
+            else
+            {
+                Physics2D.IgnoreCollision(player.collider2D, collider2D, false);
+                DontDestroyOnLoad(gameObject);
+            }
+
+            isinsideLadder = Physics2D.OverlapCircle(ground.position, radiusGround, whatisLadder);
+
+            direction = new Vector2(faceDirection, 0);
+
+            if (!onSight) //not find player
+            {
+                //find ladder
+                if (findladderforgetback && spawnScreen == Application.loadedLevelName)
+                {
+                    FindLadder();
+                    findladderforgetback = false;
+                }
+                float temp = 1;
+                if (originalDown && spawnScreen == Application.loadedLevelName)
+                {
+                    temp = -1;
+                }
+                else if (originalUp && spawnScreen == Application.loadedLevelName)
+                {
+                    temp = 1;
+                }
+                else if(doorladderDown)
+                {
+                    temp = -1;
+                }
+                if (isClimb)
+                {
+                    checkInsideLadder = true;
+                    rigidbody2D.MovePosition(rigidbody2D.position + new Vector2(0, temp * speed * Time.deltaTime));
+
+                }
+
+                //script when enemy spawn on the current scene
+                if (spawnScreen == Application.loadedLevelName)
+                {
+                    transform.Translate(new Vector2(speed * faceDirection * Time.deltaTime, rigidbody2D.velocity.y));
+                    if (faceDirection > 0 && transform.position.x > wallRight)
+                    {
+                        faceDirection = -1.0f;
+                        Flip();
+
+                    }
+                    else if (faceDirection < 0 && transform.position.x < wallLeft)
+                    {
+                        faceDirection = 1.0f;
+                        Flip();
+
+                    }
+                }
+
+            }
+            DetectEnemy();
+            MoveToPlayer();
+            DetectEnemyUp();
+            DetectEnemyDown();
+            detectOriginal();
         }
-
-        isinsideLadder = Physics2D.OverlapCircle(ground.position, radiusGround, whatisLadder);
-
-        direction = new Vector2(faceDirection, 0);
-
-        if (!onSight) //not find player
-        {
-            if (findladderforgetback)
-            {
-                FindLadder();
-                findladderforgetback = false;
-            }
-            float temp = 1;
-            if (originalDown)
-            {
-                temp = -1;
-            }
-            else if (originalUp)
-            {
-                temp = 1;
-            }
-            if (isClimb)
-            {
-                checkInsideLadder = true;
-                rigidbody2D.MovePosition(rigidbody2D.position + new Vector2(0, temp * speed * Time.deltaTime));
-
-            }
-            transform.Translate(new Vector2(speed * faceDirection * Time.deltaTime, rigidbody2D.velocity.y));
-            if (faceDirection > 0 && transform.position.x > wallRight)
-            {
-                faceDirection = -1.0f;
-                Flip();
-
-            }
-            else if (faceDirection < 0 && transform.position.x < wallLeft)
-            {
-                faceDirection = 1.0f;
-                Flip();
-
-            }
-
-        }
-        DetectEnemy();
-        MoveToPlayer();
-        DetectEnemyUp();
-        DetectEnemyDown();
-        detectOriginal();
-
     }
 
     void OnCollisionEnter2D(Collision2D col)
@@ -119,6 +193,7 @@ public class EnemyScript : MonoBehaviour
         {
             //DestroyObject(player);
             onSight = false;
+            
         }
     }
 
@@ -131,7 +206,7 @@ public class EnemyScript : MonoBehaviour
         }
         else
         {
-            rigidbody2D.gravityScale = 10;
+            rigidbody2D.gravityScale = 1;
             rigidbody2D.isKinematic = false;
             isClimb = false;
 
@@ -165,7 +240,9 @@ public class EnemyScript : MonoBehaviour
                 }
                 if (!checkInsideLadder)
                 {
-
+                    if (currentladder == null) {
+                        FindLadder();
+                    }
                     if (currentladder.position.x > transform.position.x) //player on the right side
                     {
                         transform.Translate(new Vector3(speed * 1.0f * Time.deltaTime, 0, 0));
@@ -223,7 +300,7 @@ public class EnemyScript : MonoBehaviour
         RaycastHit2D hitSomething = Physics2D.Raycast(transform.position, direction, 8.0f);
         if (hitSomething.collider != null)
         {
-            Debug.Log(hitSomething.collider.gameObject.tag);
+            //Debug.Log(hitSomething.collider.gameObject.tag);
             if (hitSomething.collider.gameObject.tag == "Player" && player.renderer.enabled)
             {
                 GameObject.FindGameObjectWithTag("MainCamera").SendMessage("SetAlert", true);
@@ -265,9 +342,10 @@ public class EnemyScript : MonoBehaviour
         
         if (hitSomething.collider != null)
         {
-            // Debug.Log(hitSomething.collider.tag );
+            
             if (hitSomething.collider.gameObject.tag == "Player")
             {
+
                 EnemyMoveup = true;
             }
 
@@ -277,7 +355,6 @@ public class EnemyScript : MonoBehaviour
     {
         if (e.tag == "mouth")
         {
-
             DoorLadder temp = e.GetComponent<DoorLadder>();
             if (temp.movingUp && enemyMoveDown && !EnemyMoveup)
             {
@@ -286,24 +363,53 @@ public class EnemyScript : MonoBehaviour
                 //checkInsideLadder = false;
                 enemyMoveDown = false;
                 EnemyMoveup = false;
-                //isFindladder = false;
-                currentladder = null;
+                isFindladder = false;
+                //currentladder = null;
             }
             else if (!temp.movingUp && !enemyMoveDown && EnemyMoveup)
             {
                 currentladder = null;
             }
+            if (temp.movingUp && !isAttackEnemy && isClimb)
+            {
+                Debug.Log("stop climbing");
+                isClimb = false;
+                currentladder = null;
+                rigidbody2D.gravityScale = 0.34f;
+                rigidbody2D.isKinematic = false;
+            }
+
+            //go to door case
+            /*else if(goToDoorFromLadder == true){
+                currentladder = null;
+            }*/
         }
+
+        if((e.tag == "Door") && !isAttackEnemy && Application.loadedLevelName != spawnScreen){
+            Destroy(gameObject);
+        }
+
+        
     }
     void OnTriggerStay2D(Collider2D e)
     {
+        
 
         if ((e.tag == "Ladder" || e.tag == "mouth") && isinsideLadder)
         {
             
+            
             if ((enemyMoveDown || EnemyMoveup) && currentladder != null)
             {
                 
+                if ((transform.position.x - currentladder.position.x) < 0.3)
+                {
+                    isClimb = true;
+
+                }
+                
+            }
+            else if(goToDoorFromLadder && currentladder != null){
                 if ((transform.position.x - currentladder.position.x) < 0.3)
                 {
                     isClimb = true;
@@ -327,12 +433,15 @@ public class EnemyScript : MonoBehaviour
             rigidbody2D.isKinematic = true;
         }
     }
+
+
+
     void FindLadder()
     {
-        allLadder = GameObject.FindGameObjectsWithTag("Ladder");
+        GameObject[] allLadder = GameObject.FindGameObjectsWithTag("mouth");
         float result = 300;
         float positionOfOject;
-        if (enemyMoveDown && isAttackEnemy)
+        /*if (enemyMoveDown && isAttackEnemy)
         {
             positionOfOject = transform.position.x;
         }
@@ -343,15 +452,26 @@ public class EnemyScript : MonoBehaviour
         else
         {
             positionOfOject = player.transform.position.x;
-        }
+        }*/
+        positionOfOject = player.transform.position.x;
         for (int i = 0; i < allLadder.Length; i++)
         {
             float distance = Mathf.Abs(allLadder[i].transform.position.x - positionOfOject);
             if (distance < result)
             {
-                result = distance;
-                currentladder = allLadder[i].transform;
+                if (enemyMoveDown && allLadder[i].GetComponent<DoorLadder>().movingUp == false && Mathf.Abs(ground.transform.position.y - allLadder[i].transform.position.y) < 0.3)
+                {
+                    result = distance;
+                    currentladder = allLadder[i].transform;
+                }
+                else if (EnemyMoveup && allLadder[i].GetComponent<DoorLadder>().movingUp && Mathf.Abs(ground.transform.position.y - allLadder[i].transform.position.y) < 0.3)
+                {
+                    result = distance;
+                    currentladder = allLadder[i].transform;
+                }
             }
+
+            
         }
     }
     void DetectEnemyDown()
@@ -360,6 +480,7 @@ public class EnemyScript : MonoBehaviour
 
         if (hitSomething.collider != null)
         {
+
             // Debug.Log(hitSomething.collider.tag );
             if (hitSomething.collider.gameObject.tag == "Player")
             {
@@ -373,12 +494,12 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
-    
+    //search born point is down or up
     public void detectOriginal()
     {
         float tempY = transform.position.y;
         float tempYOrigin = positionBorn.y;
-        Debug.Log(Mathf.Abs(tempY - tempYOrigin));
+        //Debug.Log(Mathf.Abs(tempY - tempYOrigin));
         if (Mathf.Abs(tempY - tempYOrigin) > 0.3f && tempY > tempYOrigin)
         {
             originalDown = true;
@@ -398,5 +519,124 @@ public class EnemyScript : MonoBehaviour
     public void stopEnemyfindPlayer()
     {
         isAttackEnemy = false;
+    }
+
+
+    void OnLevelWasLoaded(int level)
+    {
+        gameObject.renderer.enabled = false;
+        inActive = true;
+        GameObject.FindGameObjectWithTag("MainCamera").SendMessage("EnemyNewScreen", true);
+
+        EnemyMoveup = false;
+        enemyMoveDown = false;
+        if (isAttackEnemy == true)
+        {
+            GameObject[] tempList = GameObject.FindGameObjectsWithTag("Enemy");
+            for (int i = 0; i < tempList.Length; i++)
+            {
+                if (tempList[i].GetComponent<EnemyScript>().isAttackEnemy == false && tempList[i].GetComponent<EnemyScript>().ID == ID)
+                {
+                    Destroy(tempList[i]);
+                    break;
+                }
+            }
+        }
+
+    }
+
+    //when enemy cannot find player and find door to destroy themself
+    void FindDoor()
+    {
+        GameObject[] allDoor = GameObject.FindGameObjectsWithTag("Door");
+        float result = 300;
+        float positionOfObject = transform.position.x;
+
+
+        for (int i = 0; i < allDoor.Length; i++)
+        {
+            float distance = Mathf.Abs(allDoor[i].transform.position.x - positionOfObject);
+            if (distance < result)
+            {
+                result = distance;
+                currentDoor = allDoor[i].transform;
+
+            }
+        }
+
+        doorladderDown = false;
+        doorladderUp = false;
+        
+
+        if (currentDoor.position.y + 0.4 > transform.position.y && transform.position.y + 0.4 > currentDoor.position.y)
+        { //check enemy is in same y axis as door
+            Debug.Log("go to door");
+            goToDoorFromLadder = false;
+            sameYAxis = true;
+        }
+        else
+        {
+            
+            //Debug.Log(currentDoor.position.y + " " + transform.position.y);
+            if(currentDoor.position.y + 0.4 < transform.position.y){
+                doorladderDown = true;
+            }
+            else
+            {
+                doorladderUp = true;
+            }
+
+            Debug.Log("find ladder!!!");
+            sameYAxis = false;
+            goToDoorFromLadder = true;
+            FindLadderToDoor();
+
+        }
+
+    }
+
+    //when y axis of the enemy and door isn't the same, so find ladder first
+    void FindLadderToDoor()
+    {
+        /*GameObject[] allLadder = GameObject.FindGameObjectsWithTag("Ladder");
+        float result = 300;
+        float positionOfObjectX = transform.position.x;
+        float positionOfObjectY = transform.position.y;
+
+        for (int i = 0; i < allLadder.Length; i++)
+        {
+            float distance = Mathf.Abs(allLadder[i].transform.position.x - positionOfObjectX);
+            //Debug.Log(allLadder[i].transform.position.y + " " + transform.position.y);
+            if (distance < result && Mathf.Abs(transform.position.y - allLadder[i].transform.position.y) < 4)
+            {
+                result = distance;
+                currentladder = allLadder[i].transform;
+
+            }
+        }*/
+
+        GameObject[] allLadder = GameObject.FindGameObjectsWithTag("mouth");
+        float result = 300;
+        float positionOfObjectX = transform.position.x;
+        //float positionOfObjectY = transform.position.y;
+        for (int i = 0; i < allLadder.Length; i++)
+        {
+            float distance = Mathf.Abs(allLadder[i].transform.position.x - positionOfObjectX);
+            if (distance < result)
+            {
+                if (doorladderDown && allLadder[i].GetComponent<DoorLadder>().movingUp == false && Mathf.Abs(ground.transform.position.y - allLadder[i].transform.position.y) < 0.3)
+                {
+                    result = distance;
+                    currentladder = allLadder[i].transform;
+                }
+                else if (doorladderUp && allLadder[i].GetComponent<DoorLadder>().movingUp && Mathf.Abs(ground.transform.position.y - allLadder[i].transform.position.y) < 0.3)
+                {
+                    result = distance;
+                    currentladder = allLadder[i].transform;
+                }
+                
+            }
+        }
+
     }
 }
