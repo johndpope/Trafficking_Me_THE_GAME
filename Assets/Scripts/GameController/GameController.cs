@@ -14,6 +14,7 @@ public class GameController : MonoBehaviour {
     public float persentageEnemy;
     public float persentageVictim;
     public float persentageAddional;
+    public float persentageCorpse;
     CharacterEmotion player;
 
     public string currentMap;
@@ -23,7 +24,12 @@ public class GameController : MonoBehaviour {
     private bool enemyInActive;
 
     private int finalScore;
-    private bool addScore = true;
+    private bool addScore = true; //prevent duplicate add score
+    //private bool randomEventHappen = true; //prevent duplicate spawn enemy via door
+    private bool enemyDoorEvent;
+    private float timeImmuneToCorpse = 0;
+    public bool immuneCorpse = false;
+    
 	void Awake () {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterEmotion>();
         questManager = new QuestManager();
@@ -34,12 +40,13 @@ public class GameController : MonoBehaviour {
         //change default quest from incomplete to inprogress
         UpdateQuestStatus();
 
+
+
 	}
 
 	// Update is called once per frame
 	void Update () {
         //Debug.Log(currentQuest.QuestID);
-        Debug.Log(finalScore);
         
         if (currentQuest.getQuestStatus() == "incomplete")
         {
@@ -67,6 +74,20 @@ public class GameController : MonoBehaviour {
         if (enemyInActive)
         {
             EnemyDoorDelay();
+        }
+
+        if(enemyDoorEvent){
+            RandomSummonEvent();
+            enemyDoorEvent = false;
+        }
+
+        if(timeImmuneToCorpse > 0){
+            timeImmuneToCorpse -= Time.deltaTime;
+            Debug.Log(timeImmuneToCorpse);
+        }
+        else
+        {
+            immuneCorpse = false;
         }
         
 	}
@@ -283,23 +304,28 @@ public class GameController : MonoBehaviour {
 
         bool result = false;
         float tempPersentage = 0;
-        if (player.getTrustiness() <= 0)
+        
+        tempPersentage = persentageVictim;
+        int random = Random.Range(0, 100);
+        //Debug.Log(random+" "+Random.seed);
+        if (random < tempPersentage)
         {
-            if (persentageVictim + persentageAddional >= 100)
-            {
-                tempPersentage = 100;
-            }
-            else
-            {
-                tempPersentage = persentageAddional + persentageVictim;
-            }
+            result = true;
         }
         else
         {
-            tempPersentage = persentageVictim;
+            result = false;
         }
+        return result;
+    }
+
+    public bool HaveToSummonBraveryItem()
+    {
+        bool result = false;
+        float tempPersentage = 0;
+
+        tempPersentage = persentageCorpse;
         int random = Random.Range(0, 100);
-        //Debug.Log(random+" "+Random.seed);
         if (random < tempPersentage)
         {
             result = true;
@@ -430,22 +456,60 @@ public class GameController : MonoBehaviour {
         }
     }
 
+
+    public void SetEventOccur(bool n)
+    {
+        enemyDoorEvent = n;
+    }
+
     //summon enemy via door
     public void RandomSummonEvent()
     {
+
+        StartCoroutine(DoorSoundEvent(3.0F)); 
+        StartCoroutine(DoorSoundEvent(4.0F));
+        StartCoroutine(WaitBeforeEventOccur(5.0F)); //enemy appear after 10 second
+
+        
+    }
+
+    public void FoundCorpse(bool n)
+    {
+        timeImmuneToCorpse = 30;
+        immuneCorpse = n;
+    }
+    
+    IEnumerator WaitBeforeEventOccur(float time)
+    {
+
+        yield return new WaitForSeconds(time);
+
         GameObject[] allDoor = GameObject.FindGameObjectsWithTag("Door");
 
         for (int i = 0; i < allDoor.Length; i++)
         {
-            if(allDoor[i].GetComponent<DoorEnter>().isRandomEnemy == true){
-                //int random = Random.Range(0, 20);
-                int random = 0;
-                if(random == 0){ //5 percent random chance
-                    GameObject enemy = (GameObject)Instantiate(Resources.Load("Prefabs/Enemy"), allDoor[i].transform.position + new Vector3(0, 1, 0), Quaternion.Euler(0, 0, 0));
-                    enemy.GetComponent<EnemyScript>().spawnScreen = Application.loadedLevelName;
-                    enemy.GetComponent<EnemyScript>().ID = "0A";
-                }
+            if (allDoor[i].GetComponent<DoorEnter>().isTriggerEvent == true)
+            {
+
+                GameObject enemy = (GameObject)Instantiate(Resources.Load("Prefabs/Enemy"), allDoor[i].transform.position + new Vector3(0, 1, 0), Quaternion.Euler(0, 0, 0));
+                enemy.GetComponent<EnemyScript>().spawnScreen = Application.loadedLevelName;
+                enemy.GetComponent<EnemyScript>().ID = "0A";
+                allDoor[i].GetComponent<DoorEnter>().isTriggerEvent = false;
+                allDoor[i].GetComponent<DoorEnter>().isLock = false;
             }
         }
+
+        Debug.Log("EventOccur!!!");
+        
     }
+
+    IEnumerator DoorSoundEvent(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        Debug.Log("knock knock");
+        
+    }
+
+
 }

@@ -20,11 +20,14 @@ public class CharacterController : MonoBehaviour {
     public float move;
     public float move2;
     public bool isHide;
+
+    //player stat part
     public bool isMove;
+    private int swapMove = -1;
     public bool isswapMove;
 
 	void Start () {
-
+        isMove = true;
         anim = GetComponent<Animator>();
 
 	}
@@ -62,6 +65,17 @@ public class CharacterController : MonoBehaviour {
         move2 = Input.GetAxis("Vertical");
 
         if (isHide)
+        {
+            move = 0;
+        }
+
+        //when bravery stat is 0, move inverse
+        if (isswapMove)
+        {
+            move *= swapMove;
+            Debug.Log("move inverse na ja!!!");
+        }
+        if (!isMove)
         {
             move = 0;
         }

@@ -14,13 +14,17 @@ public class ImageController : MonoBehaviour {
 	// Update is called once per frame
     public void UpdateRender(int n)
     {
+        for (int i = 0; i < render.Length; i++)
+        {
+            render[i].sprite = (Sprite)Resources.Load("default/blank", typeof(Sprite));
+        }
         for (int j = 0; j < talker[n].Length; j++)
         {
             if (pos[n][j] == Position.left)
             {
                 render[0].sprite = (Sprite)Resources.Load("character/" + talker[n][j], typeof(Sprite));
             }
-            else if(pos[n][j] == Position.middle)
+            else if (pos[n][j] == Position.middle)
             {
                 render[1].sprite = (Sprite)Resources.Load("character/" + talker[n][j], typeof(Sprite));
             }
@@ -28,7 +32,7 @@ public class ImageController : MonoBehaviour {
             {
                 render[2].sprite = (Sprite)Resources.Load("character/" + talker[n][j], typeof(Sprite));
             }
-        }
+       }
        background.sprite = Resources.Load<Sprite>("background/" + backgrounds[n]);
 
         

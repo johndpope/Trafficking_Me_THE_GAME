@@ -11,7 +11,7 @@ public class CharacterDetail {
     private int trustinessStat;
     public CharacterDetail()
     {
-        braveryStat = 1;
+        braveryStat = 3;
         encouragementStat = 1;
         trustinessStat = 1;
     }

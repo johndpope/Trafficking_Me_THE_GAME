@@ -12,6 +12,7 @@ public class DoorEnter : MonoBehaviour {
     public GameObject getIn;
     public bool isLock;
     public bool isRandomEnemy;
+    public bool isTriggerEvent;
 
 	void Start () {
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<SceneOnLoad>();

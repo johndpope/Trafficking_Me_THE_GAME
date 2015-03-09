@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.UI;
 public class PhoneManage : MonoBehaviour {
     public GameObject camerapage;
     public GameObject messagepage;
@@ -9,7 +9,10 @@ public class PhoneManage : MonoBehaviour {
     public GameObject mobile;
     public GameObject settingpage;
     public GameObject wpicon;
-
+    public GameObject albumpage;
+    public GameObject docraw;
+    public bool seeingDoc = false;
+    public DocManager docManager;
 	// Use this for initialization
 	void Start () {
          camerapage.SetActive(false);
@@ -19,6 +22,10 @@ public class PhoneManage : MonoBehaviour {
          mobile.SetActive(false);
          settingpage.SetActive(false);
          wpicon.SetActive(true);
+         albumpage.SetActive(false);
+         docraw.SetActive(false);
+        docManager = new DocManager();
+        docManager.collectDoc(0, true);
         
 	}
 	
@@ -26,6 +33,26 @@ public class PhoneManage : MonoBehaviour {
 	void Update () {
 	
 	}
+
+
+    public void checkIsCollect()
+    {
+        GameObject[] allDoc = GameObject.FindGameObjectsWithTag("DocChoice");
+        for (int i = 0; i < docManager.getCountData() && i<allDoc.Length; i++)
+        {
+            if (docManager.isDocCollected(i) == true)
+            {
+                Image temp = allDoc[i].GetComponent<Image>();
+                temp.sprite = Resources.Load<Sprite>("doc/" + "doc"+(i+1));
+            }
+            else
+            {
+                Image temp = allDoc[i].GetComponent<Image>();
+                temp.sprite = Resources.Load<Sprite>("default/blank");
+            }
+        }
+    }
+
     public void loadPage(int i)
     {
 
@@ -65,15 +92,28 @@ public class PhoneManage : MonoBehaviour {
             case 8: Debug.Log("up");
                 mobile.SetActive(true);
                 break;
-        }
+            case 9:
+                albumpage.SetActive(true);
+                checkIsCollect();
+                break;
+            case 10:
+                if (seeingDoc)
+                {
+                    seeingDoc = false;
+                    docraw.SetActive(false);
 
-  /*      if (enter.tag == "Player")
-        {
+                    
+                 }
+                 else
+                 {
+                     albumpage.SetActive(false);
+                 }
+                break;
+            case 11:
+                seeingDoc = true;
+                docraw.SetActive(true);
+                break;
 
-            Debug.Log("u nai box na ja");
-            isinSideBox = true;
-            popup.SetActive(true);
         }
-    
-   */ }
+    }
 }

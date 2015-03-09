@@ -153,6 +153,11 @@ public class CharacterEmotion : MonoBehaviour {
         return characterDetail.getTrustnessStat();
     }
 
+    public int getBravery()
+    {
+        return characterDetail.getBraveryStat();
+    }
+
     public void getCharacterStat(out int encorage, out int trustiness, out int bravery)
     {
         encorage = characterDetail.getEncouragementStat();
