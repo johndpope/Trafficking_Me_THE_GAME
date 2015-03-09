@@ -9,12 +9,21 @@ public class FindingQuest : Quest {
     // item list before random 
     private List<ItemQuest> items;
     private List<int> map;
-    public FindingQuest(int questID, string questName, string questDescription, string questStatus, int score) : base(questID, questName, questDescription, questStatus, score) 
+    private int finalDestination;
+    public FindingQuest(int questID, string questName, string questDescription, string questStatus, int score, int finalDestination) : base(questID, questName, questDescription, questStatus, score) 
     {
         objectiveLocation = new Dictionary<int, List<ItemQuest>>();
         items = new List<ItemQuest>();
         map = new List<int>();
+
+        this.finalDestination = finalDestination;
     }
+
+    public int FinalDestination {
+        set { this.finalDestination = FinalDestination;  }
+        get { return this.finalDestination;  }
+    }
+
     // 1= true;
     //2 = false;
     public void addItemQuest(ItemQuest item)

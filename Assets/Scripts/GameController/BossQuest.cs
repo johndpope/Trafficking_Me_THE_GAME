@@ -4,36 +4,34 @@ using System.Collections.Generic;
 
 public class BossQuest : Quest {
 
-    List<List<int>> bossList;
-    public BossQuest(int questID, string questName, string questDescription, string questStatus, int score)
+    private int bossDestination;
+    private bool bossKilled;
+    public BossQuest(int questID, string questName, string questDescription, string questStatus, int score, int bossDestination, bool bossKilled)
         : base(questID, questName, questDescription, questStatus, score)
     {
-        bossList = new List<List<int>>();
+        this.bossDestination = bossDestination;
+        this.bossKilled = bossKilled;
     }
 
-    public void addBoss(int bossID, int mapID)
-    {
-        List<int> temp = new List<int>();
-        temp.Add(bossID);
-        temp.Add(mapID);
-        bossList.Add(temp);
-    }
-
-    //key = mapID
-    public bool HaveBoss(int key)
+    public bool IsInDestination(int mapID)
     {
         bool result = false;
-
-        for (int i = 0; i < bossList.Count; i++)
+        if (mapID == bossDestination)
         {
-            if (key == bossList[i][1])
-            {
-                result = true;
-                break;
-            }
+            result = true;
         }
-
         return result;
     }
+
+    public void SetBossKilled()
+    {
+        bossKilled = true;
+    }
+
+    public bool IsBossKilled()
+    {
+        return bossKilled;
+    }
+
 
 }

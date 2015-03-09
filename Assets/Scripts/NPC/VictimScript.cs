@@ -30,6 +30,7 @@ public class VictimScript : MonoBehaviour {
     private GameObject[] allVictim;
     public string ID;
     private float distancetoPlayer;
+    public float additionalDistance;
     void Awake()
     {   
 
@@ -48,6 +49,8 @@ public class VictimScript : MonoBehaviour {
         {
             Physics2D.IgnoreCollision(collider2D, allVictim[i].collider2D);
         }
+
+        additionalDistance = Random.Range(0.0f, 3.0f);
         
 	}
 	
@@ -169,8 +172,7 @@ public class VictimScript : MonoBehaviour {
 
         Vector2 vector = player.transform.position - transform.position;
         distancetoPlayer = Vector2.SqrMagnitude(vector);
-
-        
+     
 
         if (distancetoPlayer <= 60) {
             onSight = true;
@@ -243,6 +245,7 @@ public class VictimScript : MonoBehaviour {
 
     void MoveToPlayer()
     {
+
         if (isinsideLadder)
         {
             rigidbody2D.gravityScale = 0;
@@ -306,8 +309,8 @@ public class VictimScript : MonoBehaviour {
                     }
                 }
             }
-            
-            else if (player.transform.position.x - 5 > transform.position.x) //player on the right side
+
+            else if (player.transform.position.x - (3 + additionalDistance) > transform.position.x) //player on the right side
             {
                 
                 transform.Translate(new Vector3(speed * 1.0f * Time.deltaTime, 0, 0));
@@ -318,7 +321,7 @@ public class VictimScript : MonoBehaviour {
                     faceDirection = 1.0f;
                 }
             }
-            else if (player.transform.position.x + 5 < transform.position.x)
+            else if (player.transform.position.x + (3 + additionalDistance) < transform.position.x)
             { //player on the left side
                 transform.Translate(new Vector3(speed * -1.0f * Time.deltaTime, 0, 0));
                 anim.SetFloat("speed", Mathf.Abs(speed));
@@ -350,12 +353,12 @@ public class VictimScript : MonoBehaviour {
 
     void CheckFaceDirection()
     {
-        
-        if (player.transform.position.x - 5 > transform.position.x)
+
+        if (player.transform.position.x - (3 + additionalDistance) > transform.position.x)
         {
             direction = new Vector2(1.0f, 0);
         }
-        else if (player.transform.position.x + 5 < transform.position.x)
+        else if (player.transform.position.x + (3 + additionalDistance) < transform.position.x)
         {
             
             direction = new Vector2(-1.0f, 0);

@@ -14,7 +14,11 @@ public class NovelManager : MonoBehaviour {
     public enum Storys
     {
         introstory,
-        missionone
+        missionone,
+        prologue,
+        layerone,
+        layeroneone,
+        layeronetwo
     }
     public Storys selectStory;
 	void Start () {
@@ -106,6 +110,10 @@ public class NovelManager : MonoBehaviour {
         {
             case Storys.introstory: currentStory = new IntroStory(); break;
             case Storys.missionone: currentStory = new MissionOne(); break;
+            case Storys.prologue: currentStory = new Prologue(); break;
+            case Storys.layerone: currentStory = new LayerOne(); break;
+            case Storys.layeroneone: currentStory = new LayerOneOne(); break;
+            case Storys.layeronetwo: currentStory = new LayerOneTwo(); break;
             default: currentStory = new IntroStory(); break;
         }
     }

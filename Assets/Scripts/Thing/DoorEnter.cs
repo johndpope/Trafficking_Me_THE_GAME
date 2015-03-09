@@ -10,6 +10,8 @@ public class DoorEnter : MonoBehaviour {
     public string nameSummon;
     public SceneOnLoad target;
     public GameObject getIn;
+    public bool isLock;
+    public bool isRandomEnemy;
 
 	void Start () {
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<SceneOnLoad>();
@@ -23,7 +25,7 @@ public class DoorEnter : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D enter)
     {
-        if(enter.tag == "Player"){
+        if(enter.tag == "Player" && isLock == false){
             getIn.SetActive(true);
         }
     }

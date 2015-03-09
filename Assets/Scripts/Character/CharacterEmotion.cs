@@ -152,5 +152,12 @@ public class CharacterEmotion : MonoBehaviour {
     {
         return characterDetail.getTrustnessStat();
     }
+
+    public void getCharacterStat(out int encorage, out int trustiness, out int bravery)
+    {
+        encorage = characterDetail.getEncouragementStat();
+        trustiness = characterDetail.getTrustnessStat();
+        bravery = characterDetail.getBraveryStat();
+    }
 }
 

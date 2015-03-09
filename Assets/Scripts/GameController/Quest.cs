@@ -46,11 +46,16 @@ public class Quest {
         get { return this.questDescription;  }
     }
 
-    public string QuestStatus
+    public void setQuestStatus(string questStatus)
     {
-        set { this.questStatus = QuestStatus;  }
-        get { return this.questStatus; }
+        this.questStatus = questStatus;  
     }
+
+    public string getQuestStatus()
+    {
+        return this.questStatus;
+    }
+
 
     public void addnextQuestID(int questID)
     {

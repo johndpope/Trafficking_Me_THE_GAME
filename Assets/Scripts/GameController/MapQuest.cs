@@ -13,6 +13,11 @@ public class MapQuest : Quest {
         this.destination = destination;
     }
 
+    public int getDestination()
+    {
+        return this.destination;
+    }
+
     public void setDestination(int mapID){
         destination = mapID;
     }
