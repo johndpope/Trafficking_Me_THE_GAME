@@ -1,0 +1,256 @@
+fileFormatVersion: 2
+guid: 70ee78c6e2cb13149a0a054dc9636540
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: normalenemy_0
+    21300002: normalenemy_1
+    21300004: normalenemy_2
+    21300006: normalenemy_3
+    21300008: normalenemy_4
+    21300010: normalenemy_5
+    21300012: normalenemy_6
+    21300014: normalenemy_7
+    21300016: normalenemy_8
+    21300018: normalenemy_9
+    21300020: normalenemy_10
+    21300022: normalenemy_11
+    21300024: normalenemy_12
+    21300026: normalenemy_13
+    21300028: normalenemy_14
+    21300030: normalenemy_15
+    21300032: normalenemy_16
+    21300034: normalenemy_17
+    21300036: normalenemy_18
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: normalenemy_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2134
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_1
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 2134
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_2
+      rect:
+        serializedVersion: 2
+        x: 876
+        y: 2134
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_3
+      rect:
+        serializedVersion: 2
+        x: 1314
+        y: 2134
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_4
+      rect:
+        serializedVersion: 2
+        x: 1752
+        y: 2134
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1423
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_6
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 1423
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_7
+      rect:
+        serializedVersion: 2
+        x: 876
+        y: 1423
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_8
+      rect:
+        serializedVersion: 2
+        x: 1314
+        y: 1423
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_9
+      rect:
+        serializedVersion: 2
+        x: 1752
+        y: 1423
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 712
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_11
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 712
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_12
+      rect:
+        serializedVersion: 2
+        x: 876
+        y: 712
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_13
+      rect:
+        serializedVersion: 2
+        x: 1314
+        y: 712
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_14
+      rect:
+        serializedVersion: 2
+        x: 1752
+        y: 712
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_16
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 1
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_17
+      rect:
+        serializedVersion: 2
+        x: 876
+        y: 1
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: normalenemy_18
+      rect:
+        serializedVersion: 2
+        x: 1314
+        y: 1
+        width: 438
+        height: 711
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

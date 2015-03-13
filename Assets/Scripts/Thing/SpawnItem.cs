@@ -14,7 +14,7 @@ public class SpawnItem : MonoBehaviour {
             if (!system.isAlreadyHaveItem(mapID, position))
             {
                 GameObject item = (GameObject)Instantiate(Resources.Load("Prefabs/"+items), transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(0, 0, 0));
-                box a = item.GetComponent<box>();
+                item a = item.GetComponent<item>();
                 a.mapID = mapID;
                 a.position = position;
             }

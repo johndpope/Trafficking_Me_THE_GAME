@@ -19,7 +19,7 @@
 	<DebugType>full</DebugType>
 	<Optimize>false</Optimize>
 	<OutputPath>Temp\bin\Debug\</OutputPath>
-	<DefineConstants>DEBUG;TRACE;UNITY_4_6_2;UNITY_4_6;UNITY_WP8;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_LAZY_METHOD_CACHING;ENABLE_AUDIO_FMOD;ENABLE_TERRAIN;ENABLE_GENERICS;INCLUDE_IL2CPP;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_4_6_FEATURES;UNITY_WINRT;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_PHYSICS;UNITY5_SCRIPTING_IN_UNITY4;ENABLE_CACHING;ENABLE_SERIALIZATION_BY_CODEGENERATION;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN</DefineConstants>
+	<DefineConstants>DEBUG;TRACE;UNITY_4_6_2;UNITY_4_6;UNITY_METRO;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_LAZY_METHOD_CACHING;ENABLE_AUDIO_FMOD;ENABLE_WINRT_PINVOKE;ENABLE_TERRAIN;ENABLE_GENERICS;INCLUDE_IL2CPP;INCLUDE_WP8SUPPORT;ENABLE_MOVIES;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_4_6_FEATURES;UNITY_WINRT;INCLUDE_WP_BLUE_SUPPORT;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_PHYSICS;UNITY5_SCRIPTING_IN_UNITY4;ENABLE_CACHING;ENABLE_SERIALIZATION_BY_CODEGENERATION;ENABLE_CLOTH;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;UNITY_WSA;ENABLE_PROFILER;UNITY_WP_8_1;UNITY_EDITOR;UNITY_EDITOR_WIN</DefineConstants>
 	<ErrorReport>prompt</ErrorReport>
 	<WarningLevel>4</WarningLevel>
 	<NoWarn>0169</NoWarn>
@@ -39,7 +39,7 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:\Program Files (x86)\Unity\Editor\Data\PlaybackEngines\wp8support/Tools/UnityEngine.dll</HintPath>
+	  <HintPath>C:\Program Files (x86)\Unity\Editor\Data\PlaybackEngines\metrosupport/Tools/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
 	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
@@ -56,19 +56,25 @@
      <Compile Include="Assets\Scripts\GameController\FindingQuest.cs" />
      <Compile Include="Assets\Scripts\GameController\GameController.cs" />
      <Compile Include="Assets\Scripts\GameController\ItemQuest.cs" />
+     <Compile Include="Assets\Scripts\GameController\Joystick.cs" />
      <Compile Include="Assets\Scripts\GameController\MapQuest.cs" />
      <Compile Include="Assets\Scripts\GameController\Quest.cs" />
      <Compile Include="Assets\Scripts\GameController\QuestManager.cs" />
-     <Compile Include="Assets\Scripts\GameController\SpawnScript.cs" />
      <Compile Include="Assets\Scripts\GameController\StatItem.cs" />
      <Compile Include="Assets\Scripts\GameController\SummonMonster.cs" />
      <Compile Include="Assets\Scripts\NPC\BossScript.cs" />
      <Compile Include="Assets\Scripts\NPC\EnemyScript.cs" />
      <Compile Include="Assets\Scripts\NPC\SpawnBoss.cs" />
+     <Compile Include="Assets\Scripts\NPC\SpawnScript.cs" />
+     <Compile Include="Assets\Scripts\NPC\SpawnVictim.cs" />
+     <Compile Include="Assets\Scripts\NPC\Victim.cs" />
+     <Compile Include="Assets\Scripts\NPC\VictimList.cs" />
      <Compile Include="Assets\Scripts\NPC\VictimScript.cs" />
      <Compile Include="Assets\Scripts\NPC\tapHelp.cs" />
      <Compile Include="Assets\Scripts\Phone\DocManager.cs" />
      <Compile Include="Assets\Scripts\Phone\MissionDetail.cs" />
+     <Compile Include="Assets\Scripts\Phone\PhoneCanvas.cs" />
+     <Compile Include="Assets\Scripts\Phone\PhoneEvent.cs" />
      <Compile Include="Assets\Scripts\Phone\PhoneManage.cs" />
      <Compile Include="Assets\Scripts\Phone\ShowingDoc.cs" />
      <Compile Include="Assets\Scripts\Phone\StatDetail.cs" />
@@ -87,7 +93,7 @@
      <Compile Include="Assets\Scripts\Thing\ThingManager.cs" />
      <Compile Include="Assets\Scripts\Thing\ToiletEnter.cs" />
      <Compile Include="Assets\Scripts\Thing\ToiletExit.cs" />
-     <Compile Include="Assets\Scripts\Thing\box.cs" />
+     <Compile Include="Assets\Scripts\Thing\item.cs" />
      <Compile Include="Assets\Scripts\Thing\ladder.cs" />
      <Compile Include="Assets\Scripts\Thing\locker.cs" />
      <Compile Include="Assets\Scripts\Thing\taplocker.cs" />
@@ -97,6 +103,14 @@
      <Compile Include="Assets\Scripts\VisualNovel\LayerOne.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\LayerOneOne.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\LayerOneTwo.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\LayerThreeFour.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\LayerThreeOne.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\LayerThreeThree.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\LayerThreeTwo.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\LayerTwoFour.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\LayerTwoOne.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\LayerTwoThree.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\LayerTwoTwo.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\MissionOne.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\NovelManager.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\Prologue.cs" />

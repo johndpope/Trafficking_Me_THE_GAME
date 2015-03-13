@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class FindingQuest : Quest {
+public class FindingQuest : Quest
+{
 
 
     private Dictionary<int, List<ItemQuest>> objectiveLocation; //map that contain this quest
@@ -10,7 +11,8 @@ public class FindingQuest : Quest {
     private List<ItemQuest> items;
     private List<int> map;
     private int finalDestination;
-    public FindingQuest(int questID, string questName, string questDescription, string questStatus, int score, int finalDestination) : base(questID, questName, questDescription, questStatus, score) 
+    public FindingQuest(int questID, string questName, string questDescription, string questStatus, int score, int finalDestination)
+        : base(questID, questName, questDescription, questStatus, score)
     {
         objectiveLocation = new Dictionary<int, List<ItemQuest>>();
         items = new List<ItemQuest>();
@@ -19,9 +21,10 @@ public class FindingQuest : Quest {
         this.finalDestination = finalDestination;
     }
 
-    public int FinalDestination {
-        set { this.finalDestination = FinalDestination;  }
-        get { return this.finalDestination;  }
+    public int FinalDestination
+    {
+        set { this.finalDestination = FinalDestination; }
+        get { return this.finalDestination; }
     }
 
     // 1= true;
@@ -41,7 +44,7 @@ public class FindingQuest : Quest {
     public bool HaveItem(int mapID, Spawn position, out string item)
     {
         bool result = false;
-        item ="";
+        item = "";
         if (objectiveLocation.ContainsKey(mapID))
         {
             for (int i = 0; i < objectiveLocation[mapID].Count; i++)
@@ -53,7 +56,7 @@ public class FindingQuest : Quest {
                     break;
                 }
             }
-                
+
         }
         return result;
     }
@@ -74,26 +77,26 @@ public class FindingQuest : Quest {
         return result;
     }
 
-    
+
 
     public void randomItems()
     {
-        while (items.Count >0 && map.Count >0)
+        while (items.Count > 0 && map.Count > 0)
         {
             int randomMap = Random.Range(0, map.Count);
-            
+
             //Debug.Log("randomMap" + randomMap);
             if (objectiveLocation.ContainsKey(map[randomMap]))
             {
 
                 if (objectiveLocation[map[randomMap]].Count < 2)
                 {
-                    
+
                     int randomItem = Random.Range(0, items.Count);
                     ItemQuest temp = items[randomItem];
                     for (int i = 0; i < objectiveLocation[map[randomMap]].Count; i++)
                     {
-                        
+
                         if (objectiveLocation[map[randomMap]][i].getPositions() == Spawn.one)
                         {
                             temp.setPositions(Spawn.two);
@@ -107,7 +110,7 @@ public class FindingQuest : Quest {
             }
             else
             {
-                
+
                 int randomItem = Random.Range(0, items.Count);
                 objectiveLocation.Add(map[randomMap], new List<ItemQuest>());
                 ItemQuest temp = items[randomItem];
@@ -116,18 +119,19 @@ public class FindingQuest : Quest {
 
             }
         }
-        foreach (KeyValuePair<int, List<ItemQuest>> pair in objectiveLocation)
+        /*foreach (KeyValuePair<int, List<ItemQuest>> pair in objectiveLocation)
         {
-            
+
             for (int i = 0; i < pair.Value.Count; i++)
             {
                 Debug.Log(pair.Key + " " + pair.Value[i].getItemID() + " " + pair.Value[i].getPositions());
             }
-        }
+        }*/
     }
     public void setIsCollect(int mapID, Spawn position)
     {
-        if(objectiveLocation.ContainsKey(mapID)){
+        if (objectiveLocation.ContainsKey(mapID))
+        {
             for (int i = 0; i < objectiveLocation[mapID].Count; i++)
             {
                 if (objectiveLocation[mapID][i].getPositions() == position)
@@ -135,20 +139,22 @@ public class FindingQuest : Quest {
                     Debug.Log("successful");
                     objectiveLocation[mapID][i].setIsCollected(true);
                 }
-                
+
             }
         }
-        
+
     }
 
     public bool allItemCollected()
     {
         bool result = true;
-        
-        foreach(KeyValuePair<int,List<ItemQuest>> pair in objectiveLocation){
+
+        foreach (KeyValuePair<int, List<ItemQuest>> pair in objectiveLocation)
+        {
             for (int i = 0; i < pair.Value.Count; i++)
             {
-                if(pair.Value[i].getIsCollected() == false){
+                if (pair.Value[i].getIsCollected() == false)
+                {
                     result = false;
                     break;
                 }
@@ -157,5 +163,64 @@ public class FindingQuest : Quest {
 
         return result;
     }
+    public void getItemQuest(out string[] items, out int[] sum, out int[] total)
+    {
+        Dictionary<string, int> data = new Dictionary<string, int>();
+        Dictionary<string, int> dataMax = new Dictionary<string, int>();
+        foreach (KeyValuePair<int, List<ItemQuest>> pair in objectiveLocation)
+        {
+            List<ItemQuest> temp = pair.Value;
+            for (int i = 0; i < temp.Count; i++)
+            {
+                if (data.ContainsKey(temp[i].getPRefab()))
+                {
+                    if (temp[i].getIsCollected())
+                    {
+                        data[temp[i].getPRefab()] += 1;
+                    }
+                    dataMax[temp[i].getPRefab()] += 1;
+                }
+                else
+                {
+                    if (temp[i].getIsCollected())
+                    {
+                        data.Add(temp[i].getPRefab(), 1);
+                    }
+                    else
+                    {
+                        data.Add(temp[i].getPRefab(), 0);
+                    }
+                    dataMax.Add(temp[i].getPRefab(), 1);
 
+                }
+            }
+        }
+
+        List<string> temp2 = new List<string>(data.Keys);
+        items = temp2.ToArray();
+        List<int> temp3 = new List<int>(data.Values);
+        sum = temp3.ToArray();
+        List<int> temp4 = new List<int>(dataMax.Values);
+        total = temp4.ToArray();
+    }
+    public bool checkCollectwithPrefab(string name)
+    {
+        bool result = false;
+        foreach (KeyValuePair<int, List<ItemQuest>> pair in objectiveLocation)
+        {
+            List<ItemQuest> temp = pair.Value;
+            for (int i = 0; i < temp.Count; i++)
+            {
+                if (temp[i].getPRefab() == name && temp[i].getIsCollected())
+                {
+                    result = true;
+                }
+                else if (temp[i].getPRefab() == name && !temp[i].getIsCollected())
+                {
+                    result = false;
+                }
+            }
+        }
+        return result;
+    }
 }

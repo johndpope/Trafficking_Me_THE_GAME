@@ -28,9 +28,13 @@ public class VictimScript : MonoBehaviour {
     public float radiusGround = 0.2f;
     public bool isClimb;
     private GameObject[] allVictim;
-    public string ID;
     private float distancetoPlayer;
     public float additionalDistance;
+
+    public int ID;
+    public int mapID;
+    public SpawnV position;
+    GameController gameController;
     void Awake()
     {   
 
@@ -51,13 +55,16 @@ public class VictimScript : MonoBehaviour {
         }
 
         additionalDistance = Random.Range(0.0f, 3.0f);
-        
+
+        gameController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
         if (popup.helpStatus)
         {
+            gameController.SetHelpVictim(mapID, position);
+
             popup.gameObject.SetActive(false);
 
             DontDestroyOnLoad(gameObject);
@@ -161,6 +168,7 @@ public class VictimScript : MonoBehaviour {
         if(col.gameObject.tag == "Enemy"){
             Destroy(gameObject);
             player.GetComponent<CharacterEmotion>().updateTrustnessStat(-1);
+            gameController.SetHelpVictimFail(mapID, ID);
         }
     } 
 
@@ -390,24 +398,14 @@ public class VictimScript : MonoBehaviour {
             }
         }
     }
+
     void OnLevelWasLoaded(int level)
     {
-        //find other victim
-        playerMoveDown = false;
-        playerMoveUp = false;
-        if (popup.helpStatus == true)
-        {
-            GameObject[] tempList = GameObject.FindGameObjectsWithTag("Victim");
-            for (int i = 0; i < tempList.Length; i++)
-            {
-                if (tempList[i].GetComponent<VictimScript>().popup.helpStatus == false && tempList[i].GetComponent<VictimScript>().ID == ID)
-                {
-                    Destroy(tempList[i]);
-                    break;
-                }
-            }
+        if(Application.loadedLevelName == "thirtythree"){
+            player.GetComponent<CharacterEmotion>().updateTrustnessStat(1);
+            Destroy(gameObject);
+            Debug.Log("help successful");
         }
-        
     }
     
 }

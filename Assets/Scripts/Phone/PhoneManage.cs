@@ -13,6 +13,7 @@ public class PhoneManage : MonoBehaviour {
     public GameObject docraw;
     public bool seeingDoc = false;
     public DocManager docManager;
+    public MissionDetail mission; 
 	// Use this for initialization
 	void Start () {
          camerapage.SetActive(false);
@@ -26,6 +27,7 @@ public class PhoneManage : MonoBehaviour {
          docraw.SetActive(false);
         docManager = new DocManager();
         docManager.collectDoc(0, true);
+        mission = messagepage.GetComponent<MissionDetail>();
         
 	}
 	
@@ -63,6 +65,7 @@ public class PhoneManage : MonoBehaviour {
                 break;
             case 2: Debug.Log("mess");
                 messagepage.SetActive(true);
+                mission.UpdateCurrentMission();
                 break;
             case 3: Debug.Log("rec"); 
                 soundpage.SetActive(true);

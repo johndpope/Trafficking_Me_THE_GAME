@@ -20,16 +20,21 @@ public class CharacterController : MonoBehaviour {
     public float move;
     public float move2;
     public bool isHide;
+    private bool climbAnime;
 
     //player stat part
     public bool isMove;
     private int swapMove = -1;
     public bool isswapMove;
 
+    //joystick part
+    Joystick moveJoystick;
+    float defaultXPosition = 0.0f;
+    float defaultYPosition = 0.0f;
 	void Start () {
         isMove = true;
         anim = GetComponent<Animator>();
-
+        //moveJoystick = GameObject.FindGameObjectWithTag("Joystick").GetComponent<Joystick>();
 	}
 
     void Awake()
@@ -61,6 +66,27 @@ public class CharacterController : MonoBehaviour {
 
         }
 
+        //joystick move
+        //horizontal movement
+        /*if ((moveJoystick.position.x > defaultXPosition || moveJoystick.position.x < defaultXPosition)
+                && Mathf.Abs(moveJoystick.position.x) >= Mathf.Abs(moveJoystick.position.y))
+        {
+            move = moveJoystick.position.x - defaultXPosition;
+        }
+        //vertical movement
+        else if ((moveJoystick.position.y > defaultYPosition || moveJoystick.position.y < defaultYPosition)
+                && Mathf.Abs(moveJoystick.position.y) > Mathf.Abs(moveJoystick.position.x))
+        {
+
+            move2 = moveJoystick.position.y - defaultYPosition;
+        }
+        else
+        {
+            move = 0;
+            move2 = 0;
+        }*/
+
+        //keyboard move
         move = Input.GetAxis("Horizontal");
         move2 = Input.GetAxis("Vertical");
 
@@ -80,16 +106,34 @@ public class CharacterController : MonoBehaviour {
             move = 0;
         }
 
+        /*if(!climbAnime){
+            move2 = 0;
+        }*/
+
         anim.SetFloat("speed", Mathf.Abs(move));
+        
 
         if (isClimb)
         {
             rigidbody2D.MovePosition(rigidbody2D.position + new Vector2(0, move2 * (maxSpeed / 2) * Time.deltaTime));
+            if (move2 == 0)
+            {
+                anim.speed = 0;
+            }
+            else
+            {
+                anim.speed = 1;
+            }
+            anim.SetFloat("speed2", 1);
+            
         }
         else
         {
             rigidbody2D.velocity = new Vector2(move * maxSpeed, rigidbody2D.velocity.y);
+            anim.SetFloat("speed2", Mathf.Abs(0));
         }
+
+        
 
         if (move > 0 && !facingRight)
             Flip();
@@ -108,6 +152,29 @@ public class CharacterController : MonoBehaviour {
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.tag == "mouth" || col.tag == "Ladder"){
+            climbAnime = true;
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D col)
+    {
+        if (col.tag == "mouth" || col.tag == "Ladder")
+        {
+            climbAnime = true;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.tag == "mouth" || col.tag == "Ladder")
+        {
+            climbAnime = false;
+        }
     }
 
     

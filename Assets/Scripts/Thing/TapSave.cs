@@ -13,9 +13,8 @@ public class TapSave : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
         {
 
-            Collider2D temp = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-
-            if (temp.tag == "Save")
+            if (Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition)) &&
+                Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition)).tag == "Save")
             {
                 Debug.Log("save game!!");
 

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class box : MonoBehaviour {
+public class item : MonoBehaviour {
 
 	// Use this for initialization
     public bool isinSideBox;

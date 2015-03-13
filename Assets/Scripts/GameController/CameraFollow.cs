@@ -28,7 +28,7 @@ public class CameraFollow : MonoBehaviour {
             Vector3 destination = transform.position + delta;
             //float targetX = Mathf.Clamp(destination.x, minXY.x, maxXY.x);
             //float targetY = Mathf.Clamp(destination.y, minXY.y, maxXY.y);
-            destination = new Vector3(destination.x, destination.y, destination.z);
+            destination = new Vector3(destination.x, destination.y + 1.5f, destination.z);
             
             transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, dampTime);
 

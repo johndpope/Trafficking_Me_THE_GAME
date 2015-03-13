@@ -18,7 +18,15 @@ public class NovelManager : MonoBehaviour {
         prologue,
         layerone,
         layeroneone,
-        layeronetwo
+        layeronetwo,
+        layertwoone,
+        layertwotwo,
+        layertwothree,
+        layertwofour,
+        layerthreeone,
+        layerthreetwo,
+        layerthreethree,
+        layerthreefour
     }
     public Storys selectStory;
 	void Start () {
@@ -65,13 +73,14 @@ public class NovelManager : MonoBehaviour {
             {
                 string[] choices = currentStory.getChoice(path);
                 
-                if (choices.Length == 3)
+                if (choices.Length == 1) 
                 {
                     buttonway1.SetActive(true);
                     Text[] temp = buttonway1.GetComponentsInChildren<Text>();
                     for (int i = 0; i < temp.Length; i++)
                     {
                         temp[i].text = choices[i];
+                        
                     }
                 }
                 else
@@ -114,7 +123,15 @@ public class NovelManager : MonoBehaviour {
             case Storys.layerone: currentStory = new LayerOne(); break;
             case Storys.layeroneone: currentStory = new LayerOneOne(); break;
             case Storys.layeronetwo: currentStory = new LayerOneTwo(); break;
-            default: currentStory = new IntroStory(); break;
+            case Storys.layertwoone: currentStory = new LayerTwoOne(); break;
+            case Storys.layertwotwo: currentStory = new LayerTwoTwo(); break;
+            case Storys.layertwothree: currentStory = new LayerTwoThree(); break;
+            case Storys.layertwofour: currentStory = new LayerTwoFour(); break;
+            case Storys.layerthreeone: currentStory = new LayerThreeOne(); break;
+            case Storys.layerthreetwo: currentStory = new LayerThreeTwo(); break;
+            case Storys.layerthreethree: currentStory = new LayerThreeThree(); break;
+            case Storys.layerthreefour: currentStory = new LayerThreeFour(); break;
+            default: currentStory = new Prologue(); break;
         }
     }
 }

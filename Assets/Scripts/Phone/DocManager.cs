@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-public class DocManager : MonoBehaviour
+public class DocManager
 {
     Dictionary<int, bool> DocCollection;
 	// Use this for initialization

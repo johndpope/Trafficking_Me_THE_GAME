@@ -17,7 +17,6 @@ public class SceneOnLoad : MonoBehaviour {
 
     void OnLevelWasLoaded(int level)
     {
-        
         //victim
         GameObject[] tempList = GameObject.FindGameObjectsWithTag("Victim");
         List<Transform> victim = new List<Transform>();
@@ -31,12 +30,12 @@ public class SceneOnLoad : MonoBehaviour {
 
         //enemy
         tempList = GameObject.FindGameObjectsWithTag("Enemy");
-        List<Transform> enemy = new List<Transform>();
+        List<GameObject> enemy = new List<GameObject>();
         for (int i = 0; i < tempList.Length; i++)
         {
             if (tempList[i].GetComponent<EnemyScript>().isAttackEnemy)
             {
-                enemy.Add(tempList[i].transform);
+                enemy.Add(tempList[i]);
             }
             
         }
@@ -44,8 +43,10 @@ public class SceneOnLoad : MonoBehaviour {
         GameObject[] temp = GameObject.FindGameObjectsWithTag("summonPoint");
         for (int i = 0; i < temp.Length; i++)
         {
+
             if (temp[i].name == summon)
             {
+              
                 //victim
                 for (int j = 0; j < victim.Count; j++)
                 {
@@ -55,11 +56,19 @@ public class SceneOnLoad : MonoBehaviour {
                 //enemy
                 for (int j = 0; j < enemy.Count; j++)
                 {
-                    enemy[j].position = temp[i].transform.position;
+                    enemy[j].transform.position = temp[i].transform.position;
+                            
+                    /*if (j > 1) //dont forget to fix
+                    {
+                        Destroy(enemy[j]);
+                    }*/
+                    
                 }
 
                 Transform player = GameObject.FindGameObjectWithTag("Player").transform;
                 player.position = temp[i].transform.position;
+
+                break;
 
             }
  
@@ -67,13 +76,17 @@ public class SceneOnLoad : MonoBehaviour {
         }
         GameObject[] tempCharacter = GameObject.FindGameObjectsWithTag("Player");
         GameObject[] tempCamera = GameObject.FindGameObjectsWithTag("MainCamera");
+        GameObject[] tempPhoneCanvas = GameObject.FindGameObjectsWithTag("PhoneCanvas");
+        GameObject[] tempPhoneEvent = GameObject.FindGameObjectsWithTag("PhoneEvent");
 
-        if (tempCharacter.Length > 1 && tempCamera.Length > 1)
+        if (tempCharacter.Length > 1 && tempCamera.Length > 1 && tempPhoneCanvas.Length > 1 && tempPhoneEvent.Length > 1)
         {
             for (int i = 1; i < tempCharacter.Length; i++)
             {
                 Destroy(tempCharacter[i]);
                 Destroy(tempCamera[i]);
+                Destroy(tempPhoneCanvas[i]);
+                Destroy(tempPhoneEvent[i]);
             }
             
         }

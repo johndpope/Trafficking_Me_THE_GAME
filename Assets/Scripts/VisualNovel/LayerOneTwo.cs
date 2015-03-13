@@ -20,8 +20,8 @@ public class LayerOneTwo : Story {
         addConversation(2, "Mari", "I think I can't handle this alone, let call for a help", "background", new string[] { "new", "kuy" }, new Position[] { Position.left, Position.right }, null, null);
         addConversation(3, "Mari", "I can't leave my friend behind, I have to save them before it too late", "background", new string[] { "new", "kuy" }, new Position[] { Position.left, Position.right }, null, null);
         addChoices(1, "Contact authority for help");
-        addChoices(1, "Search for friend and destroy heroine");
+        addChoices(1, "Destroy trafficker shipment");
         addAnswer(1, 1, 2, 1, 3);
-        addAnswer(1, 2, 3, 1, 5);
+        addAnswer(1, 2, 3, 1, 6);
     }
 }
