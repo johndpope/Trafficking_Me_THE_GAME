@@ -255,10 +255,16 @@ public class GameController : MonoBehaviour {
     {
 
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject[] dog = GameObject.FindGameObjectsWithTag("Dog");
         //Debug.Log("sum of enemy"+enemy.Length);
         for (int i = 0; i < enemy.Length; i++)
         {
             enemy[i].SendMessage("stopEnemyfindPlayer");
+        }
+
+        for (int i = 0; i < dog.Length; i++)
+        {
+            dog[i].SendMessage("StopDogFindPlayer");
         }
     }
     //received the value from enemy script when enemy detect player to set enemy alert time in game controller
@@ -436,10 +442,12 @@ public class GameController : MonoBehaviour {
     {
         enemyDelayTime = 1.5f;
         enemyInActive = true;
+        
     }
 
     public void EnemyDoorDelay()
     {
+        
         if (enemyDelayTime > 0)
         {
             enemyDelayTime -= Time.deltaTime;
@@ -449,15 +457,23 @@ public class GameController : MonoBehaviour {
             GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
             for (int i = 0; i < enemy.Length; i++)
             {
-                
                 enemy[i].GetComponent<EnemyScript>().inActive = false;
                 enemy[i].renderer.enabled = true;
                 if(player.renderer.enabled == false){
                     enemy[i].GetComponent<EnemyScript>().isAttackEnemy = false;
                 }
-                
-                
-                
+            }
+
+            GameObject[] dog = GameObject.FindGameObjectsWithTag("Dog");
+            for (int i = 0; i < dog.Length; i++)
+            {
+
+                dog[i].GetComponent<DogScript>().inActive = false;
+                dog[i].renderer.enabled = true;
+                if (player.renderer.enabled == false)
+                {
+                    dog[i].GetComponent<DogScript>().isAttackEnemy = false;
+                }
             }
             
             enemyInActive = false;

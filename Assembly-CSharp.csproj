@@ -63,6 +63,7 @@
      <Compile Include="Assets\Scripts\GameController\StatItem.cs" />
      <Compile Include="Assets\Scripts\GameController\SummonMonster.cs" />
      <Compile Include="Assets\Scripts\NPC\BossScript.cs" />
+     <Compile Include="Assets\Scripts\NPC\DogScript.cs" />
      <Compile Include="Assets\Scripts\NPC\EnemyScript.cs" />
      <Compile Include="Assets\Scripts\NPC\SpawnBoss.cs" />
      <Compile Include="Assets\Scripts\NPC\SpawnScript.cs" />

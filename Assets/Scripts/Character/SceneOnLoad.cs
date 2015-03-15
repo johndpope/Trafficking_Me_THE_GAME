@@ -40,6 +40,21 @@ public class SceneOnLoad : MonoBehaviour {
             
         }
 
+        //dog
+        tempList = GameObject.FindGameObjectsWithTag("Dog");
+        List<GameObject> dog = new List<GameObject>();
+        
+        for (int i = 0; i < tempList.Length; i++)
+        {
+
+            if (tempList[i].GetComponent<DogScript>().onSight)
+            {
+                dog.Add(tempList[i]);
+                
+            }
+
+        }
+
         GameObject[] temp = GameObject.FindGameObjectsWithTag("summonPoint");
         for (int i = 0; i < temp.Length; i++)
         {
@@ -57,12 +72,12 @@ public class SceneOnLoad : MonoBehaviour {
                 for (int j = 0; j < enemy.Count; j++)
                 {
                     enemy[j].transform.position = temp[i].transform.position;
-                            
-                    /*if (j > 1) //dont forget to fix
-                    {
-                        Destroy(enemy[j]);
-                    }*/
-                    
+                }
+
+                //dog
+                for (int j = 0; j < dog.Count; j++)
+                {
+                    dog[j].transform.position = temp[i].transform.position;
                 }
 
                 Transform player = GameObject.FindGameObjectWithTag("Player").transform;

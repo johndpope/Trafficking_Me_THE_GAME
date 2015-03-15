@@ -46,8 +46,10 @@ public class EnemyScript : MonoBehaviour
 
     private bool doorladderUp;
     private bool doorladderDown;
+    private Animator anim;
     void Start()
     {
+        anim = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         sprite = GetComponent<SpriteRenderer>();
         radarVector = new Vector2(-1, 1);
@@ -59,6 +61,7 @@ public class EnemyScript : MonoBehaviour
         {
             Physics2D.IgnoreCollision(gameObject.collider2D, friend[i].collider2D);
         }
+        
     }
 
     // Update is called once per frame
@@ -95,6 +98,15 @@ public class EnemyScript : MonoBehaviour
         }
         else
         {
+            //animation part
+            if (isClimb)
+            {
+                anim.SetBool("climbing", true);
+            }
+            else
+            {
+                anim.SetBool("climbing", false);
+            }
             //when not find player and enemy not spawn on this scene
             if (!isAttackEnemy && spawnScreen != Application.loadedLevelName)
             {
@@ -473,18 +485,7 @@ public class EnemyScript : MonoBehaviour
         GameObject[] allLadder = GameObject.FindGameObjectsWithTag("mouth");
         float result = 300;
         float positionOfOject;
-        /*if (enemyMoveDown && isAttackEnemy)
-        {
-            positionOfOject = transform.position.x;
-        }
-        else if (EnemyMoveup && isAttackEnemy)
-        {
-            positionOfOject = player.transform.position.x;
-        }
-        else
-        {
-            positionOfOject = player.transform.position.x;
-        }*/
+        
         if (isAttackEnemy)
         {
             positionOfOject = player.transform.position.x;
@@ -574,21 +575,7 @@ public class EnemyScript : MonoBehaviour
 
         EnemyMoveup = false;
         enemyMoveDown = false;
-        /*if (isAttackEnemy == true)
-        {
-            //DontDestroyOnLoad(gameObject);
-            
-            GameObject[] tempList = GameObject.FindGameObjectsWithTag("Enemy");
-            for (int i = 0; i < tempList.Length; i++)
-            {
-                
-                if (tempList[i].GetComponent<EnemyScript>().isAttackEnemy == false && tempList[i].GetComponent<EnemyScript>().ID == ID)
-                {
-                    Destroy(tempList[i]);
-                    break;
-                }
-            }
-        }*/
+        
 
     }
 

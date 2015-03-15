@@ -1,0 +1,271 @@
+fileFormatVersion: 2
+guid: b17ced402d54f4e49968ec8dc4c846d9
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: victim_idle_0
+    21300002: victim_idle_1
+    21300004: victim_idle_2
+    21300006: victim_idle_3
+    21300008: victim_idle_4
+    21300010: victim_idle_5
+    21300012: victim_idle_6
+    21300014: victim_idle_7
+    21300016: victim_idle_8
+    21300018: victim_idle_9
+    21300020: victim_idle_10
+    21300022: victim_idle_11
+    21300024: victim_idle_12
+    21300026: victim_idle_13
+    21300028: victim_idle_14
+    21300030: victim_idle_15
+    21300032: victim_idle_16
+    21300034: victim_idle_17
+    21300036: victim_idle_18
+    21300038: victim_idle_19
+    21300040: victim_idle_20
+    21300042: victim_idle_21
+    21300044: victim_idle_22
+    21300046: victim_idle_23
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 2
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 500
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: victim_idle_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3444
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_1
+      rect:
+        serializedVersion: 2
+        x: 622
+        y: 3444
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_2
+      rect:
+        serializedVersion: 2
+        x: 1244
+        y: 3444
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_3
+      rect:
+        serializedVersion: 2
+        x: 1866
+        y: 3444
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_4
+      rect:
+        serializedVersion: 2
+        x: 2488
+        y: 3444
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_5
+      rect:
+        serializedVersion: 2
+        x: 3110
+        y: 3444
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2296
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_7
+      rect:
+        serializedVersion: 2
+        x: 622
+        y: 2296
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_8
+      rect:
+        serializedVersion: 2
+        x: 1244
+        y: 2296
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_9
+      rect:
+        serializedVersion: 2
+        x: 1866
+        y: 2296
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_10
+      rect:
+        serializedVersion: 2
+        x: 2488
+        y: 2296
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_11
+      rect:
+        serializedVersion: 2
+        x: 3110
+        y: 2296
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1148
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_13
+      rect:
+        serializedVersion: 2
+        x: 622
+        y: 1148
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_14
+      rect:
+        serializedVersion: 2
+        x: 1244
+        y: 1148
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_15
+      rect:
+        serializedVersion: 2
+        x: 1866
+        y: 1148
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_16
+      rect:
+        serializedVersion: 2
+        x: 2488
+        y: 1148
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_17
+      rect:
+        serializedVersion: 2
+        x: 3110
+        y: 1148
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: victim_idle_19
+      rect:
+        serializedVersion: 2
+        x: 622
+        y: 0
+        width: 622
+        height: 1148
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

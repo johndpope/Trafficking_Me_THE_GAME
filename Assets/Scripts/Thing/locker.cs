@@ -7,12 +7,13 @@ public class locker : MonoBehaviour {
     public GameObject getInLocker;
     public GameObject getOutLocker;
     public GameObject player;
+    public GameObject locker2;
 	void Start () {
         player = GameObject.FindGameObjectWithTag("Player"); 
 
         getInLocker.SetActive(false);
         getOutLocker.SetActive(false);
-
+        locker2.renderer.enabled = false;
 	}
 	
 	// Update is called once per frame
@@ -41,13 +42,19 @@ public class locker : MonoBehaviour {
             {
                 getInLocker.SetActive(false);
                 getOutLocker.SetActive(true);
-                
+
+                locker2.renderer.enabled = true;
+                gameObject.renderer.enabled = false;
+
                 player.renderer.enabled = false;
             }
             else if (getInLocker.GetComponent<taplocker>().inLocker == false && getOutLocker.GetComponent<taplocker>().inLocker == false)
             {
                 getInLocker.SetActive(true);
                 getOutLocker.SetActive(false);
+
+                locker2.renderer.enabled = false;
+                gameObject.renderer.enabled = true;
 
                 player.renderer.enabled = true;
             }

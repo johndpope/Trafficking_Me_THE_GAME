@@ -11,7 +11,7 @@ public class VictimScript : MonoBehaviour {
 
     GameObject player;
     SpriteRenderer sprite;
-    float faceDirection = 1.0f; //default face left
+    float faceDirection = -1.0f; //default face left
     Vector2 direction = Vector2.right;
     public LayerMask layermasks;
     public Transform currentladder;
@@ -35,10 +35,7 @@ public class VictimScript : MonoBehaviour {
     public int mapID;
     public SpawnV position;
     GameController gameController;
-    void Awake()
-    {   
 
-    }
 
 	void Start () {
         anim = GetComponent<Animator>();
@@ -63,6 +60,14 @@ public class VictimScript : MonoBehaviour {
 	void FixedUpdate () {
         if (popup.helpStatus)
         {
+            if(isClimb){
+                anim.SetBool("climbing",true);
+            }
+            else
+            {
+                anim.SetBool("climbing", false);
+            }
+
             gameController.SetHelpVictim(mapID, position);
 
             popup.gameObject.SetActive(false);
@@ -153,13 +158,13 @@ public class VictimScript : MonoBehaviour {
             popup.gameObject.SetActive(false);
             
         }
-        if (exit.tag == "Ladder")
+        if (exit.tag == "Ladder" || exit.tag == "mouth")
         {
             notmovetoLadder = false;
             playerMoveUp = false;
             playerMoveDown = false;
             rigidbody2D.gravityScale = 20;
-            rigidbody2D.isKinematic = true;
+            rigidbody2D.isKinematic = false;
         }
     }
 
