@@ -185,6 +185,34 @@ public class VictimList  {
         }
         return victimID;
     }
-
-    
+    public int[] getVictimID()
+    {
+        List<int> tempID = new List<int>();
+        foreach (KeyValuePair<int, List<Victim>> pair in victimList)
+        {
+            List<Victim> temp = pair.Value;
+            for (int i = 0; i < temp.Count; i++)
+            {
+                if (temp[i].getIsHelp() == true)
+                {
+                    tempID.Add(temp[i].getVictimID());
+                }
+            }
+        }
+        return tempID.ToArray();
+    }
+    public void setVictimisCollectbyID(int id, bool n)
+    {
+        foreach (KeyValuePair<int, List<Victim>> pair in victimList)
+        {
+            List<Victim> temp = pair.Value;
+            for (int i = 0; i < temp.Count; i++)
+            {
+                if (temp[i].getVictimID() == id)
+                {
+                    temp[i].setIsHelp(n);
+                }
+            }
+        }
+    }
 }

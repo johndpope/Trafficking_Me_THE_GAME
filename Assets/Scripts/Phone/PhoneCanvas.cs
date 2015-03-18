@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class PhoneCanvas : MonoBehaviour {
-
+    public PhoneManage phone;
     void Awake()
     {
         DontDestroyOnLoad(transform.gameObject);

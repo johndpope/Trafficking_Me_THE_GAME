@@ -23,9 +23,25 @@ public class DogScript : MonoBehaviour {
     public LayerMask whatIsPlayer;
     public bool inActive;
     public string spawnScreen;
+    public string ID;
+    bool victimInLocker;
+    GameObject[] allEnemy;
 	void Start () {
         player = GameObject.FindGameObjectWithTag("Player");
+        GameObject[] friend = GameObject.FindGameObjectsWithTag("Dog");
+        for (int i = 0; i < friend.Length; i++)
+        {
+            Physics2D.IgnoreCollision(gameObject.collider2D, friend[i].collider2D);
+        }
+        allEnemy = GameObject.FindGameObjectsWithTag("Enemy");
+        for (int i = 0; i < allEnemy.Length; i++)
+        {
+            Physics2D.IgnoreCollision(gameObject.collider2D, allEnemy[i].collider2D);
+        }
+
+        
 	}
+
 
     void Update()
     {
@@ -59,7 +75,27 @@ public class DogScript : MonoBehaviour {
             }
             else
             {
-                Physics2D.IgnoreCollision(player.collider2D, collider2D, false);
+                if (isAttackEnemy && player.renderer.enabled == false)
+                {
+                    Physics2D.IgnoreCollision(player.collider2D, collider2D);
+                    if(Mathf.Abs(transform.position.x - player.transform.position.x) < 0.5){
+                        victimInLocker = true;
+                        transform.Translate(new Vector3(0, 0, 0));
+                        Debug.Log("call enemy to locker");
+
+                        for (int i = 0; i < allEnemy.Length; i++)
+                        {
+                            allEnemy[i].GetComponent<EnemyScript>().isAttackEnemy = true;
+                        }
+                    }
+                }
+                else
+                {
+                    Physics2D.IgnoreCollision(player.collider2D, collider2D, false);
+                    victimInLocker = false;
+                }
+
+                
             }
 
 
@@ -134,7 +170,7 @@ public class DogScript : MonoBehaviour {
 
     void MoveToPlayer()
     {
-        if(isAttackEnemy){
+        if(isAttackEnemy && !victimInLocker){
             if (enemyMoveDown || enemyMoveUp)
             {
                 FindNearestLadder();
@@ -165,6 +201,11 @@ public class DogScript : MonoBehaviour {
                 {
                     //stop
                     transform.Translate(new Vector3(0,0,0));
+                    Debug.Log("enemy to ladder");
+                    for (int i = 0; i < allEnemy.Length; i++)
+                    {
+                        allEnemy[i].GetComponent<EnemyScript>().isAttackEnemy = true;
+                    }
                 }
                 
                 
@@ -200,12 +241,12 @@ public class DogScript : MonoBehaviour {
         float tempY = transform.position.y;
         float tempYPlayer = player.transform.position.y;
 
-        if (Mathf.Abs(tempY - tempYPlayer) > 0.3f && tempY > tempYPlayer)
+        if (Mathf.Abs(tempY - tempYPlayer) > 1.0f && tempY > tempYPlayer)
         {
             enemyMoveDown = true;
             enemyMoveUp = false;
         }
-        else if (Mathf.Abs(tempY - tempYPlayer) > 0.3f && tempY < tempYPlayer)
+        else if (Mathf.Abs(tempY - tempYPlayer) > 1.0f && tempY < tempYPlayer)
         {
             enemyMoveDown = false;
             enemyMoveUp = true;

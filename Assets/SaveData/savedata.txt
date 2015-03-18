@@ -1,0 +1,1 @@
+<player><profile1><time>3/18/2015 11:43:53 AM</time><score>0</score><Questtype>Map</Questtype><courage>3</courage><bravery>3</bravery><trustness>1</trustness><previous_map>four</previous_map><victimList /><doc><document ID="0" /></doc></profile1></player>

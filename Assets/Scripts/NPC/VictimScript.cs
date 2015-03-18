@@ -36,6 +36,8 @@ public class VictimScript : MonoBehaviour {
     public SpawnV position;
     GameController gameController;
 
+    private GameObject[] allEnemy;
+    private GameObject[] allDog;
 
 	void Start () {
         anim = GetComponent<Animator>();
@@ -54,6 +56,9 @@ public class VictimScript : MonoBehaviour {
         additionalDistance = Random.Range(0.0f, 3.0f);
 
         gameController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
+
+        allEnemy = GameObject.FindGameObjectsWithTag("Enemy");
+        allDog = GameObject.FindGameObjectsWithTag("Dog");
 	}
 	
 	// Update is called once per frame
@@ -82,10 +87,26 @@ public class VictimScript : MonoBehaviour {
             if (!player.renderer.enabled)
             {
                 renderer.enabled = false;
+                for (int i = 0; i < allEnemy.Length; i++)
+                {
+                    Physics2D.IgnoreCollision(allEnemy[i].collider2D, collider2D);
+                }
+                for (int i = 0; i < allDog.Length; i++)
+                {
+                    Physics2D.IgnoreCollision(allDog[i].collider2D, collider2D);
+                }
             }
             else
             {
                 renderer.enabled = true;
+                for (int i = 0; i < allEnemy.Length; i++)
+                {
+                    Physics2D.IgnoreCollision(allEnemy[i].collider2D, collider2D, false);
+                }
+                for (int i = 0; i < allDog.Length; i++)
+                {
+                    Physics2D.IgnoreCollision(allDog[i].collider2D, collider2D, false);
+                }
             }
 
             CheckFaceDirection();
@@ -170,7 +191,7 @@ public class VictimScript : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if(col.gameObject.tag == "Enemy"){
+        if(col.gameObject.tag == "Enemy" || col.gameObject.tag == "Dog"){
             Destroy(gameObject);
             player.GetComponent<CharacterEmotion>().updateTrustnessStat(-1);
             gameController.SetHelpVictimFail(mapID, ID);
@@ -408,6 +429,7 @@ public class VictimScript : MonoBehaviour {
     {
         if(Application.loadedLevelName == "thirtythree"){
             player.GetComponent<CharacterEmotion>().updateTrustnessStat(1);
+            player.GetComponent<CharacterEmotion>().updateBraveryStat(1);
             Destroy(gameObject);
             Debug.Log("help successful");
         }

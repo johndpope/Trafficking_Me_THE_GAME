@@ -33,4 +33,16 @@ public class DocManager
     {
         return DocCollection.Count;
     }
+    public int[] getALLDocCollect()
+    {
+        List<int> result = new List<int>();
+        foreach (KeyValuePair<int, bool> pair in DocCollection)
+        {
+            if (pair.Value == true)
+            {
+                result.Add(pair.Key);
+            }
+        }
+        return result.ToArray();
+    }
 }

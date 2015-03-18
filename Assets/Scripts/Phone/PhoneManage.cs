@@ -13,7 +13,12 @@ public class PhoneManage : MonoBehaviour {
     public GameObject docraw;
     public bool seeingDoc = false;
     public DocManager docManager;
-    public MissionDetail mission; 
+    public MissionDetail mission;
+    public bool inDocArea = false;
+    public GameObject image;
+    public int documentID;
+
+    private CharacterEmotion player;
 	// Use this for initialization
 	void Start () {
          camerapage.SetActive(false);
@@ -28,6 +33,9 @@ public class PhoneManage : MonoBehaviour {
         docManager = new DocManager();
         docManager.collectDoc(0, true);
         mission = messagepage.GetComponent<MissionDetail>();
+        documentID = -1;
+
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterEmotion>();
         
 	}
 	
@@ -35,6 +43,20 @@ public class PhoneManage : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    public void takeDoc()
+    {
+        if (documentID > -1)
+        {
+            StopCoroutine(blinking(image));
+            inDocArea = false;
+            docManager.collectDoc(documentID, true);
+
+            player.updateEncouragementStat(1);
+        }
+        
+    }
+
 
 
     public void checkIsCollect()
@@ -55,6 +77,35 @@ public class PhoneManage : MonoBehaviour {
         }
     }
 
+    IEnumerator blinking(GameObject obj)
+    {
+        while (inDocArea)
+        {
+            Debug.Log("inDocArea");
+            
+            yield return new WaitForSeconds(0.5f);
+            obj.SetActive(!obj.activeSelf);
+        }
+        obj.SetActive(false);
+    }
+    public void setWarnmingFindDoc(bool haveDoc, int docID)
+    {
+        documentID = docID;
+        inDocArea = haveDoc;
+        if (haveDoc == true && camerapage.activeSelf == true)
+        {
+            
+            StopCoroutine(blinking(image));
+            StartCoroutine(blinking(image));
+        }
+        else
+        {
+            //inDocArea = haveDoc;
+            image.SetActive(false);
+        }
+        
+
+    }
     public void loadPage(int i)
     {
 
@@ -62,6 +113,15 @@ public class PhoneManage : MonoBehaviour {
         {
             case 1: Debug.Log("cam");
                 camerapage.SetActive(true);
+                if (inDocArea)
+                {
+                    StopCoroutine(blinking(image));
+                    StartCoroutine(blinking(image));
+                }
+                else
+                {
+                    image.SetActive(false);
+                }
                 break;
             case 2: Debug.Log("mess");
                 messagepage.SetActive(true);
@@ -93,7 +153,20 @@ public class PhoneManage : MonoBehaviour {
                 mobile.SetActive(true);
                 break;
             case 8: Debug.Log("up");
-                mobile.SetActive(true);
+                if (mobile.activeSelf)
+                {
+                    camerapage.SetActive(false);
+                    messagepage.SetActive(false);
+                    soundpage.SetActive(false);
+                    statpage.SetActive(false);
+                    mobile.SetActive(false);
+                    settingpage.SetActive(false);
+                    mobile.SetActive(false);
+                }
+                else
+                {
+                    mobile.SetActive(true);
+                }
                 break;
             case 9:
                 albumpage.SetActive(true);

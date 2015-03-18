@@ -5,7 +5,9 @@ public class EnemyScript : MonoBehaviour
 {
 
     // Use this for initialization
-    float speed = 5.0f;
+    float speed = 0;
+    float speedWalk = 2.5f;
+    float speedRun = 2.5f;
     public float wallLeft;
     public float wallRight;
     public bool onSight; // found player
@@ -47,20 +49,39 @@ public class EnemyScript : MonoBehaviour
     private bool doorladderUp;
     private bool doorladderDown;
     private Animator anim;
+    private CharacterController running;
+    public float maximumHearing;
+    private GameController system;
+
+    private Vector3 tempPositionBorn;
+    private bool ischecking;
+    private bool isWorry;
+
+    private bool soundOn;
+    private Vector3 originalPositionBorn;
     void Start()
     {
         anim = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
+        running = player.GetComponent<CharacterController>();
         sprite = GetComponent<SpriteRenderer>();
         radarVector = new Vector2(-1, 1);
         positionBorn = gameObject.transform.position;
         wallLeft = positionBorn.x - 5;
         wallRight = positionBorn.x + 5;
+        system = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
         GameObject[] friend = GameObject.FindGameObjectsWithTag("Enemy");
         for (int i = 0; i < friend.Length; i++)
         {
             Physics2D.IgnoreCollision(gameObject.collider2D, friend[i].collider2D);
         }
+        GameObject[] allDog = GameObject.FindGameObjectsWithTag("Dog");
+        for (int i = 0; i < allDog.Length; i++)
+        {
+            Physics2D.IgnoreCollision(gameObject.collider2D, allDog[i].collider2D);
+        }
+
+        originalPositionBorn = positionBorn;
         
     }
 
@@ -86,6 +107,11 @@ public class EnemyScript : MonoBehaviour
             //Debug.Log("destroy");
             Destroy(gameObject);
         }
+        if (!inActive)
+        {
+            detectPlayerwithSound();
+            changeCurrentBornposition();
+        }
     }
     void FixedUpdate()
     {
@@ -107,6 +133,20 @@ public class EnemyScript : MonoBehaviour
             {
                 anim.SetBool("climbing", false);
             }
+
+            if (isAttackEnemy)
+            {
+                speed = speedRun + speedWalk;
+            }
+            else
+            {
+                speed = speedWalk;
+            }
+
+            if(soundOn){
+                ChangeEnemyMovement();
+            }
+
             //when not find player and enemy not spawn on this scene
             if (!isAttackEnemy && spawnScreen != Application.loadedLevelName)
             {
@@ -164,6 +204,7 @@ public class EnemyScript : MonoBehaviour
             else
             {
                 Physics2D.IgnoreCollision(player.collider2D, collider2D, false);
+
             }
 
             isinsideLadder = Physics2D.OverlapCircle(ground.position, radiusGround, whatisLadder);
@@ -247,7 +288,7 @@ public class EnemyScript : MonoBehaviour
         {
             //DestroyObject(player);
             onSight = false;
-            
+            col.gameObject.renderer.enabled = true;
         }
     }
 
@@ -416,6 +457,8 @@ public class EnemyScript : MonoBehaviour
         if((e.tag == "Door") && !isAttackEnemy && Application.loadedLevelName != spawnScreen){
             Destroy(gameObject);
         }
+
+        
 
         
     }
@@ -656,4 +699,82 @@ public class EnemyScript : MonoBehaviour
         }
 
     }
+
+    void detectPlayerwithSound()
+    {
+        float length = Vector2.Distance(gameObject.transform.position, player.transform.position);
+        if (!isAttackEnemy && (running.move != 0 || running.move2 != 0) && length <= maximumHearing)
+        {
+            float dangerousValue = 0;
+            float muli = 0;
+
+            if (running.getRun())
+            {
+                muli = 2;
+            }
+            else
+            {
+                muli = 1;
+            }
+            dangerousValue = maximumHearing - length;
+            system.IncreaseWarmningLevel(dangerousValue * muli);
+        }
+
+    }
+    public void changeCurrentBornposition()
+    {
+        if (system.getWarningLevel() > 60 && !ischecking && !isAttackEnemy)
+        {
+            positionBorn = player.transform.position;
+            tempPositionBorn = positionBorn;
+            wallLeft = positionBorn.x - 5;
+            wallRight = positionBorn.x + 5;
+            ischecking = true;
+            isWorry = true;
+            StartCoroutine(checking());
+        }
+        else if (system.getWarningLevel() < 60 && !ischecking && isWorry)
+        {
+            Debug.Log("checkingtemp");
+            isWorry = false;
+            positionBorn = tempPositionBorn;
+            wallLeft = positionBorn.x - 5;
+            wallRight = positionBorn.x + 5;
+
+        }
+    }
+
+    //make enemy move stop searching when heard the sound
+    public void ChangeEnemyMovement()
+    {
+        
+        if (isWorry && !isAttackEnemy)
+        {
+
+            ischecking = false;
+            system.setWarningLevel(0);
+            system.setWarning(false);
+
+            tempPositionBorn = originalPositionBorn;
+
+            soundOn = false;
+        }
+        else
+        {
+            soundOn = false;
+        }
+    }
+
+    public IEnumerator checking()
+    {
+        yield return new WaitForSeconds(5);
+        ischecking = false;
+    }
+
+    public void SetSoundAttract(bool n)
+    {
+        soundOn = n;
+    }
+
+    
 }

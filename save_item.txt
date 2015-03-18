@@ -1,0 +1,13 @@
+quest
+- what is type
+score
+stat
+- courage
+- bravery
+-trustness
+previous map
+victimlist
+doc
+
+
+ 

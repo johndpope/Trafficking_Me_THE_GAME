@@ -35,14 +35,14 @@ public class CharacterEmotion : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //first time stun bravery
-        if (player.isMove && isStun)
+        if (player.isMove && isStun && characterDetail.getBraveryStat() == 0)
         {
             currentTime = stopMoveCoundown;
             player.isMove = false;
 
         }
         //end of stun
-        if (currentTime < 0 && !player.isMove)
+        if (currentTime < 0 && !player.isMove && characterDetail.getBraveryStat() == 0)
         {
             isStun = false;
             player.isMove = true;
@@ -67,7 +67,8 @@ public class CharacterEmotion : MonoBehaviour {
         {
             isStunE = true;
             currentTimeE = stopMoveCoundownE;
-            player.isMove = false;
+            player.isMove = false;           
+            
         }
         else if (characterDetail.getEncouragementStat() == 0 && currentTimeE < 0 && isStunE)
         {
@@ -76,7 +77,8 @@ public class CharacterEmotion : MonoBehaviour {
             player.isMove = true;
 
         }
-        
+
+
         coundownTime();
         
         
@@ -119,6 +121,7 @@ public class CharacterEmotion : MonoBehaviour {
         }
 
         characterDetail.setEncouragementStat(temp);
+
     }
 
     public void coundownTime()

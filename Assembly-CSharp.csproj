@@ -62,6 +62,10 @@
      <Compile Include="Assets\Scripts\GameController\QuestManager.cs" />
      <Compile Include="Assets\Scripts\GameController\StatItem.cs" />
      <Compile Include="Assets\Scripts\GameController\SummonMonster.cs" />
+     <Compile Include="Assets\Scripts\GameController\alereffect.cs" />
+     <Compile Include="Assets\Scripts\GameController\changeTextRun.cs" />
+     <Compile Include="Assets\Scripts\GameController\warningEffect.cs" />
+     <Compile Include="Assets\Scripts\Map\MapManager.cs" />
      <Compile Include="Assets\Scripts\NPC\BossScript.cs" />
      <Compile Include="Assets\Scripts\NPC\DogScript.cs" />
      <Compile Include="Assets\Scripts\NPC\EnemyScript.cs" />
@@ -80,8 +84,11 @@
      <Compile Include="Assets\Scripts\Phone\ShowingDoc.cs" />
      <Compile Include="Assets\Scripts\Phone\StatDetail.cs" />
      <Compile Include="Assets\Scripts\Phone\StatusBar.cs" />
+     <Compile Include="Assets\Scripts\Saveloadgame\ClickSaveLoad.cs" />
+     <Compile Include="Assets\Scripts\Saveloadgame\SaveLoadManager.cs" />
      <Compile Include="Assets\Scripts\Thing\BraveryStatItem.cs" />
      <Compile Include="Assets\Scripts\Thing\Document.cs" />
+     <Compile Include="Assets\Scripts\Thing\DocumentEnter.cs" />
      <Compile Include="Assets\Scripts\Thing\DoorEnemy.cs" />
      <Compile Include="Assets\Scripts\Thing\DoorEnter.cs" />
      <Compile Include="Assets\Scripts\Thing\DoorLadder.cs" />
@@ -100,7 +107,6 @@
      <Compile Include="Assets\Scripts\Thing\taplocker.cs" />
      <Compile Include="Assets\Scripts\Thing\tappopup.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\ImageController.cs" />
-     <Compile Include="Assets\Scripts\VisualNovel\IntroStory.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\LayerOne.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\LayerOneOne.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\LayerOneTwo.cs" />
@@ -112,7 +118,6 @@
      <Compile Include="Assets\Scripts\VisualNovel\LayerTwoOne.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\LayerTwoThree.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\LayerTwoTwo.cs" />
-     <Compile Include="Assets\Scripts\VisualNovel\MissionOne.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\NovelManager.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\Prologue.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\Story.cs" />
@@ -121,6 +126,7 @@
      <Compile Include="Assets\Scripts\VisualNovel\checkStory.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\checkStoryByClick.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\soundVisual.cs" />
+     <None Include="Assets\SaveData\savedata.txt" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.2/UnityEngine.UI.dll</HintPath>
  </Reference>

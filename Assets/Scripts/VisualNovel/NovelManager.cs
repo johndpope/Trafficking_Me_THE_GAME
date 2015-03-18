@@ -13,8 +13,6 @@ public class NovelManager : MonoBehaviour {
     private GameController system;
     public enum Storys
     {
-        introstory,
-        missionone,
         prologue,
         layerone,
         layeroneone,
@@ -117,8 +115,6 @@ public class NovelManager : MonoBehaviour {
     {
         switch (n)
         {
-            case Storys.introstory: currentStory = new IntroStory(); break;
-            case Storys.missionone: currentStory = new MissionOne(); break;
             case Storys.prologue: currentStory = new Prologue(); break;
             case Storys.layerone: currentStory = new LayerOne(); break;
             case Storys.layeroneone: currentStory = new LayerOneOne(); break;

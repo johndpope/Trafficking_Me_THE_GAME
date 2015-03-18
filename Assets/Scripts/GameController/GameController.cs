@@ -30,7 +30,16 @@ public class GameController : MonoBehaviour {
     private float timeImmuneToCorpse = 0;
     public bool immuneCorpse = false;
     public int maxEnemy;
+    public int maxDog;
     VictimList victimList;
+    private GameObject toilet;
+
+    private bool isIncrease;
+    public float warnmingLevel;
+    private IEnumerator waitWarming;
+    private bool isWarmning;
+
+    private float encouragementTime; //time use for deduct the encouragementTime
 	void Awake () {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterEmotion>();
         questManager = new QuestManager();
@@ -55,6 +64,11 @@ public class GameController : MonoBehaviour {
 
 	}
 
+    void Start()
+    {
+        waitWarming = delayWarming(5);
+    }
+
 	// Update is called once per frame
 	void Update () {
         //Debug.Log(currentQuest.QuestID);
@@ -76,10 +90,21 @@ public class GameController : MonoBehaviour {
         }
 
         gameTime += Time.deltaTime;
+
+        encouragementTime += Time.deltaTime;
+
         if (isAlert)
         {
             Timealert();
             //Debug.Log("alert!! " + alertTime);
+            if(toilet != null)
+                toilet.GetComponent<DoorEnter>().isLock = true;
+
+        }
+        else
+        {
+            if (toilet != null)
+                toilet.GetComponent<DoorEnter>().isLock = false;
         }
 
         //delay time before enemy appear on the door
@@ -103,6 +128,13 @@ public class GameController : MonoBehaviour {
         {
             immuneCorpse = false;
         }
+
+        if (!isIncrease)
+        {
+            decreaseWarmingLevel(10);
+        }
+
+        DeductEncouragementStat();
         
 	}
 
@@ -271,6 +303,11 @@ public class GameController : MonoBehaviour {
     public void SetAlert(bool n)
     {
         alertTime = timeAlertEnd;
+        if (n == true)
+        {
+            warnmingLevel = 0;
+            isWarmning = false;
+        }
         isAlert = n;
     }
 
@@ -319,6 +356,39 @@ public class GameController : MonoBehaviour {
         }        
             return result;
     }
+
+    public bool HavetoSummonDog(int persentage)
+    {
+        bool result = false;
+        float tempPersentage = 0;
+        if (player.getTrustiness() <= 0) //when trustiness stat depleted, chance to find enemy increase
+        {
+            if (persentage + persentageAddional >= 100)
+            {
+                tempPersentage = 100;
+            }
+            else
+            {
+                tempPersentage = persentageAddional + persentage;
+            }
+        }
+        else
+        {
+            tempPersentage = persentage;
+        }
+        int random = Random.Range(0, 100);
+        //Debug.Log(random+" "+Random.seed);
+        if (random < tempPersentage)
+        {
+            result = true;
+        }
+        else
+        {
+            result = false;
+        }
+        return result;
+    }
+
 
     //check that is there victim in this map or not
     public bool HaveVictimInMap(int mapID, SpawnV spawn)
@@ -413,9 +483,39 @@ public class GameController : MonoBehaviour {
         previousMap = currentMap;
         currentMap = Application.loadedLevelName;
 
+        toilet = GameObject.FindGameObjectWithTag("Toilet");
+
         RandomSummonEnemy();
+        RandomSummonDog();
 
         checkMapQuestArrive();
+
+        //when pass A00, unlock door to scene fifteen
+        if (currentMap == "nine" && currentQuest.QuestID > 0)
+        {
+            GameObject[] door = GameObject.FindGameObjectsWithTag("Door");
+            for (int i = 0; i < door.Length; i++)
+            {
+                if (door[i].GetComponent<DoorEnter>().mapName == "fifteen")
+                {
+                    door[i].GetComponent<DoorEnter>().isLock = false;
+                    break;
+                }
+            }
+        }
+        
+        //when do mission C01, unlock fire exit door
+        if(currentMap == "thirty" && currentQuest.QuestID == 7){
+            GameObject[] door = GameObject.FindGameObjectsWithTag("Door");
+            for (int i = 0; i < door.Length; i++)
+            {
+                if (door[i].GetComponent<DoorEnter>().mapName == "thirtyeight")
+                {
+                    door[i].GetComponent<DoorEnter>().isLock = false;
+                    break;
+                }
+            }
+        }
         
     }
 
@@ -525,6 +625,54 @@ public class GameController : MonoBehaviour {
         }
     }
 
+    public void RandomSummonDog()
+    {
+        if (currentQuest.QuestID >= 3)
+        {
+            GameObject[] allSpawnPoint = GameObject.FindGameObjectsWithTag("SpawnPointDog");
+            GameObject[] allDog = GameObject.FindGameObjectsWithTag("Dog");
+            int count = allDog.Length;
+            for (int i = 0; i < allSpawnPoint.Length; i++)
+            {
+                int persentage = allSpawnPoint[i].GetComponent<SpawnScript>().spawnPersentage;
+                string tempID = allSpawnPoint[i].GetComponent<SpawnScript>().ID;
+                bool haveSameID = false;
+
+                for (int j = 0; j < allDog.Length; j++)
+                {
+                    DogScript dogs = allDog[j].GetComponent<DogScript>();
+                    if (dogs.ID == tempID)
+                    {
+                        haveSameID = true;
+                        break;
+                    }
+                }
+                
+                if (count > maxDog) 
+                {
+
+                    haveSameID = true;
+                }
+                if (!haveSameID)
+                {
+
+                    bool temp = HavetoSummonDog(persentage);
+                    if (temp && count < maxDog)
+                    {
+                        GameObject dog = (GameObject)Instantiate(Resources.Load("Prefabs/dog"), allSpawnPoint[i].transform.position + new Vector3(0, 1, 0), Quaternion.Euler(0, 0, 0));
+                        dog.GetComponent<DogScript>().spawnScreen = Application.loadedLevelName;
+                        dog.GetComponent<DogScript>().ID = allSpawnPoint[i].GetComponent<SpawnScript>().ID;
+                        //enemy.GetComponent<EnemyScript>().wallLeft = allSpawnPoint[i].GetComponent<SpawnScript>().wallLeft;
+                        //enemy.GetComponent<EnemyScript>().wallRight = allSpawnPoint[i].GetComponent<SpawnScript>().wallRight;
+                        count++;
+                    }
+                }
+
+
+            }
+        }
+    }
+
 
     public void SetEventOccur(bool n)
     {
@@ -580,5 +728,120 @@ public class GameController : MonoBehaviour {
         
     }
 
+    public void IncreaseWarmningLevel(float number)
+    {
+        float numbers = number * Time.deltaTime;
 
+        if (warnmingLevel + numbers >= 100)
+        {
+            SetAlert(true);
+            if (GameObject.FindGameObjectsWithTag("Enemy") != null)
+            {
+                GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+                for (int i = 0; i < enemy.Length; i++)
+                {
+                    EnemyScript temp = enemy[i].GetComponent<EnemyScript>();
+                    temp.isAttackEnemy = true;
+                }
+            }
+            warnmingLevel = 100;
+        }
+        else
+        {
+            warnmingLevel += numbers;
+        }
+        if (warnmingLevel >= 60 && !isAlert)
+        {
+            isWarmning = true;
+        }
+        isIncrease = true;
+        StopCoroutine(waitWarming);
+        waitWarming = delayWarming(5);
+        StartCoroutine(waitWarming);
+    }
+    public void decreaseWarmingLevel(float number)
+    {
+        float numbers = number * Time.deltaTime;
+        if (warnmingLevel - numbers <= 0)
+        {
+            warnmingLevel = 0;
+        }
+        else
+        {
+            warnmingLevel -= numbers;
+        }
+        if (warnmingLevel < 60)
+        {
+            isWarmning = false;
+        }
+
+    }
+    public IEnumerator delayWarming(float time)
+    {
+
+        //Debug.Log("startWaitingTime");
+        yield return new WaitForSeconds(time);
+        //Debug.Log("stopWaitingTime");
+        isIncrease = false;
+    }
+    public bool getWarning()
+    {
+        return isWarmning;
+    }
+    public float getWarningLevel()
+    {
+        return warnmingLevel;
+    }
+
+    //for sound attraction testing
+    public void setWarning(bool n)
+    {
+        isWarmning = n;
+    }
+
+    //for sound attraction testing
+    public void setWarningLevel(int n)
+    {
+        warnmingLevel = n;
+    }
+    
+
+    public void DeductEncouragementStat()
+    {
+        if(encouragementTime > 300){
+            //deduct the point
+            encouragementTime = 0;
+            player.updateEncouragementStat(-1);
+        }    
+    }
+
+    public void SoundAttractEnemy()
+    {
+        GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+        
+        if (enemy != null)
+        {
+            for (int i = 0; i < enemy.Length; i++)
+            {
+                enemy[i].SendMessage("SetSoundAttract", true);
+            }
+        }
+    }
+
+    public void setScore(int n)
+    {
+        finalScore = n;
+    }
+    public int getScore()
+    {
+        return finalScore;
+    }
+    public int[] getALLvictimList()
+    {
+        return victimList.getVictimID();
+    }
+    public void setVictimisHelpbyID(int id, bool n)
+    {
+        victimList.setVictimisCollectbyID(id, n);
+    }
 }

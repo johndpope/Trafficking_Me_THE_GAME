@@ -22,6 +22,14 @@ public class StatDetail : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+        updateStatText();
 	}
+
+    public void updateStatText()
+    {
+        playeremo.getCharacterStat(out encorage, out trustiness, out bravery);
+        encorageout.text = "Encourage :  " + encorage;
+        trustinessout.text = "Trustiness : " + trustiness;
+        braveryout.text = "Bravery :" + bravery;
+    }
 }

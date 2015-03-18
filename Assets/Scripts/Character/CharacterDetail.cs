@@ -12,7 +12,7 @@ public class CharacterDetail {
     public CharacterDetail()
     {
         braveryStat = 3;
-        encouragementStat = 1;
+        encouragementStat = 3;
         trustinessStat = 1;
     }
 

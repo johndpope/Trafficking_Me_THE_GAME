@@ -119,14 +119,14 @@ public class FindingQuest : Quest
 
             }
         }
-        /*foreach (KeyValuePair<int, List<ItemQuest>> pair in objectiveLocation)
+        foreach (KeyValuePair<int, List<ItemQuest>> pair in objectiveLocation)
         {
 
             for (int i = 0; i < pair.Value.Count; i++)
             {
                 Debug.Log(pair.Key + " " + pair.Value[i].getItemID() + " " + pair.Value[i].getPositions());
             }
-        }*/
+        }
     }
     public void setIsCollect(int mapID, Spawn position)
     {
@@ -222,5 +222,37 @@ public class FindingQuest : Quest
             }
         }
         return result;
+    }
+    public int[] getALLItemList()
+    {
+        List<int> result = new List<int>();
+        foreach (KeyValuePair<int, List<ItemQuest>> pair in objectiveLocation)
+        {
+            List<ItemQuest> key = pair.Value;
+            for (int i = 0; i < key.Count; i++)
+            {
+                if (key[i].getIsCollected() == true)
+                {
+                    result.Add(key[i].getItemID());
+                }
+
+            }
+        }
+        return result.ToArray();
+    }
+    public void setAllCurrentItemisCollect(int itemID)
+    {
+        foreach (KeyValuePair<int, List<ItemQuest>> pair in objectiveLocation)
+        {
+            List<ItemQuest> key = pair.Value;
+            for (int i = 0; i < key.Count; i++)
+            {
+                if (key[i].getItemID() == itemID)
+                {
+                    objectiveLocation[pair.Key][i].setIsCollected(true);
+                }
+
+            }
+        }
     }
 }

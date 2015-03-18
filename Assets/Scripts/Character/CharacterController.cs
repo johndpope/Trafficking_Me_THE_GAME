@@ -27,6 +27,8 @@ public class CharacterController : MonoBehaviour {
     private int swapMove = -1;
     public bool isswapMove;
 
+    public bool isRun;
+    public float speedRun;
     //joystick part
     Joystick moveJoystick;
     float defaultXPosition = 0.0f;
@@ -101,21 +103,32 @@ public class CharacterController : MonoBehaviour {
             move *= swapMove;
             Debug.Log("move inverse na ja!!!");
         }
+
         if (!isMove)
         {
             move = 0;
         }
+
 
         /*if(!climbAnime){
             move2 = 0;
         }*/
 
         anim.SetFloat("speed", Mathf.Abs(move));
-        
+
+        float speedMove;
+        if (isRun)
+        {
+            speedMove = maxSpeed + speedRun;
+        }
+        else
+        {
+            speedMove = maxSpeed;
+        }
 
         if (isClimb)
         {
-            rigidbody2D.MovePosition(rigidbody2D.position + new Vector2(0, move2 * (maxSpeed / 2) * Time.deltaTime));
+            rigidbody2D.MovePosition(rigidbody2D.position + new Vector2(0, move2 * (speedMove / 2) * Time.deltaTime));
             if (move2 == 0)
             {
                 anim.speed = 0;
@@ -129,7 +142,7 @@ public class CharacterController : MonoBehaviour {
         }
         else
         {
-            rigidbody2D.velocity = new Vector2(move * maxSpeed, rigidbody2D.velocity.y);
+            rigidbody2D.velocity = new Vector2(move * speedMove, rigidbody2D.velocity.y);
             anim.SetFloat("speed2", Mathf.Abs(0));
         }
 
@@ -177,5 +190,12 @@ public class CharacterController : MonoBehaviour {
         }
     }
 
-    
+    public void changeRun()
+    {
+        isRun = !isRun;
+    }
+    public bool getRun()
+    {
+        return isRun;
+    }
 }
