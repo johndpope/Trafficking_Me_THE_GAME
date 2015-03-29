@@ -19,14 +19,13 @@ public class EnemyScript : MonoBehaviour
     Vector2 direction = Vector2.right;
     public bool isAttackEnemy;
     public Transform currentladder;
-    private bool EnemyMoveup;
+    public bool EnemyMoveup;
     public LayerMask layermasks;
-    private Vector2 radarVector;
     private bool radarRight;
     private bool checkInsideLadder;
     //private GameObject[] allLadder;
     private bool isFindladder;
-    private bool isinsideLadder;
+    public bool isinsideLadder;
     public LayerMask whatisLadder;
     public Transform ground;
     public float radiusGround = 0.2f;
@@ -46,8 +45,8 @@ public class EnemyScript : MonoBehaviour
     private bool sameYAxis; //is enemy in the same y axis as door
     private bool goToDoorFromLadder;
 
-    private bool doorladderUp;
-    private bool doorladderDown;
+    public bool doorladderUp;
+    public bool doorladderDown;
     private Animator anim;
     private CharacterController running;
     public float maximumHearing;
@@ -59,13 +58,15 @@ public class EnemyScript : MonoBehaviour
 
     private bool soundOn;
     private Vector3 originalPositionBorn;
+    private IEnumerator stopWalking;
+    public bool isWalking;
+    private float directionclimb = 1;
     void Start()
     {
         anim = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         running = player.GetComponent<CharacterController>();
         sprite = GetComponent<SpriteRenderer>();
-        radarVector = new Vector2(-1, 1);
         positionBorn = gameObject.transform.position;
         wallLeft = positionBorn.x - 5;
         wallRight = positionBorn.x + 5;
@@ -82,7 +83,8 @@ public class EnemyScript : MonoBehaviour
         }
 
         originalPositionBorn = positionBorn;
-        
+        isWalking = true;
+        stopWalking = Stopwalking();
     }
 
     // Update is called once per frame
@@ -209,49 +211,63 @@ public class EnemyScript : MonoBehaviour
 
             isinsideLadder = Physics2D.OverlapCircle(ground.position, radiusGround, whatisLadder);
 
-            direction = new Vector2(faceDirection, 0);
 
             if (!onSight) //not find player
             {
+                if (currentladder == null)
+                {
+                    findladderforgetback = false;
+                }
                 //find ladder
                 if (!findladderforgetback && spawnScreen == Application.loadedLevelName)
                 {
                     FindLadder();
                     findladderforgetback = true;
                 }
-                float temp = 1;
                 if (originalDown && spawnScreen == Application.loadedLevelName)
                 {
-                    temp = -1;
+                    directionclimb = -1;
                 }
                 else if (originalUp && spawnScreen == Application.loadedLevelName)
                 {
-                    temp = 1;
+                    directionclimb = 1;
                 }
-                else if(doorladderDown)
+                else if (doorladderDown && spawnScreen != Application.loadedLevelName)
                 {
-                    temp = -1;
+                    directionclimb = -1;
                 }
-                
+                else if (doorladderUp && spawnScreen != Application.loadedLevelName)
+                {
+                    directionclimb = 1;
+                }
                 if (isClimb)
                 {
                     checkInsideLadder = true;
-                    transform.Translate(new Vector2(0, temp * speed * Time.deltaTime)); 
-
+                    transform.Translate(new Vector2(0, directionclimb * speed * Time.deltaTime)); 
                 }
 
                 //script when enemy spawn on the current scene
                 if (spawnScreen == Application.loadedLevelName && originalUp == false && originalDown == false)
                 {
-                    transform.Translate(new Vector2(speed * faceDirection * Time.deltaTime, rigidbody2D.velocity.y));
+                    if (isWalking)
+                    {
+                        transform.Translate(new Vector2(speed * faceDirection * Time.deltaTime, rigidbody2D.velocity.y));
+                    }
+                    
                     if (faceDirection > 0 && transform.position.x > wallRight)
                     {
+                        StopCoroutine(stopWalking);
+                        stopWalking = Stopwalking();
+                        StartCoroutine(stopWalking);
                         faceDirection = -1.0f;
                         Flip();
 
                     }
                     else if (faceDirection < 0 && transform.position.x < wallLeft)
                     {
+                        StopCoroutine(stopWalking);
+                        stopWalking = Stopwalking();
+                        StartCoroutine(stopWalking);
                         faceDirection = 1.0f;
                         Flip();
 
@@ -313,14 +329,14 @@ public class EnemyScript : MonoBehaviour
             if (EnemyMoveup || enemyMoveDown)
             {
 
-                float temp = 1;
+                
                 if (enemyMoveDown)
                 {
-                    temp = -1;
+                    directionclimb = -1;
                 }
                 else
                 {
-                    temp = 1;
+                    directionclimb = 1;
                 }
                 if (!isFindladder && currentladder == null)
                 {
@@ -330,8 +346,12 @@ public class EnemyScript : MonoBehaviour
                 if (isClimb)
                 {
                     checkInsideLadder = true;
-                    rigidbody2D.MovePosition(rigidbody2D.position + new Vector2(0, temp * speed * Time.deltaTime));
+                    rigidbody2D.MovePosition(rigidbody2D.position + new Vector2(0, directionclimb * speed * Time.deltaTime));
 
+                }
+                else
+                {
+                    checkInsideLadder = false;
                 }
                 if (!checkInsideLadder)
                 {
@@ -392,7 +412,15 @@ public class EnemyScript : MonoBehaviour
     }
     void DetectEnemy()
     {
-        RaycastHit2D hitSomething = Physics2D.Raycast(transform.position, direction, 8.0f);
+        if (faceDirection == 1)
+        {
+            direction = Vector2.right;
+        }
+        else
+        {
+            direction = new Vector2(-1, 0);
+        }
+        RaycastHit2D hitSomething = Physics2D.Raycast(transform.position, direction, 8.0f, layermasks);
         if (hitSomething.collider != null)
         {
             //Debug.Log(hitSomething.collider.gameObject.tag);
@@ -410,6 +438,9 @@ public class EnemyScript : MonoBehaviour
                     enemyMoveDown = false;
                     isFindladder = false;
                     findladderforgetback = false;
+                    isWalking = true;
+                    anim.speed = 1;
+                    StopCoroutine(stopWalking);
                 }
 
             }
@@ -429,7 +460,7 @@ public class EnemyScript : MonoBehaviour
                 enemyMoveDown = false;
                 EnemyMoveup = false;
                 isFindladder = false;
-                //currentladder = null;
+                currentladder = null;
             }
             else if (!temp.movingUp && !enemyMoveDown && EnemyMoveup)
             {
@@ -470,7 +501,8 @@ public class EnemyScript : MonoBehaviour
             
             if (isAttackEnemy && (enemyMoveDown || EnemyMoveup) && currentladder != null)
             {
-                if ((transform.position.x - currentladder.position.x) < 0.3)
+              
+                if (Mathf.Abs(transform.position.x - currentladder.position.x) < 0.1)
                 {
                     isClimb = true;
 
@@ -478,7 +510,7 @@ public class EnemyScript : MonoBehaviour
                 
             }
             else if(goToDoorFromLadder && currentladder != null){
-                if ((transform.position.x - currentladder.position.x) < 0.3)
+                if (Mathf.Abs(transform.position.x - currentladder.position.x) < 0.2)
                 {
                     isClimb = true;
 
@@ -486,15 +518,15 @@ public class EnemyScript : MonoBehaviour
             }
 
             if(!isAttackEnemy && (originalDown || originalUp) && isinsideLadder){
-                if (currentladder !=null && (transform.position.x - currentladder.position.x) < 0.3)
+                if (currentladder != null && Mathf.Abs(transform.position.x - currentladder.position.x) < 0.2)
                 {
                     isClimb = true;
 
                 }
-                else
+                /*else
                 {
                     isClimb = true;
-                }
+                }*/
             }
            
             isFindladder = false;
@@ -508,7 +540,7 @@ public class EnemyScript : MonoBehaviour
     void OnTriggerExit2D(Collider2D e)
     {
 
-        if (e.tag == "Ladder")
+       if (e.tag == "Ladder")
         {
             checkInsideLadder = false;
             EnemyMoveup = false;
@@ -518,6 +550,7 @@ public class EnemyScript : MonoBehaviour
             isClimb = false;
             rigidbody2D.gravityScale = 20;
             rigidbody2D.isKinematic = true;
+            isFindladder = false;
         }
     }
 
@@ -725,13 +758,29 @@ public class EnemyScript : MonoBehaviour
     {
         if (system.getWarningLevel() > 60 && !ischecking && !isAttackEnemy)
         {
-            positionBorn = player.transform.position;
             tempPositionBorn = positionBorn;
+            if (player.GetComponent<CharacterController>().isClimb)
+            {
+                Vector2 tempPosition = new Vector2(player.transform.position.x, gameObject.transform.position.y);
+                positionBorn = tempPosition;
+            }
+            else
+            {
+                positionBorn = player.transform.position;
+            }
             wallLeft = positionBorn.x - 5;
             wallRight = positionBorn.x + 5;
             ischecking = true;
             isWorry = true;
             StartCoroutine(checking());
+
+            detectOriginal();
+            if (originalUp || originalDown)
+            {
+                FindLadder();
+            }
+
+
         }
         else if (system.getWarningLevel() < 60 && !ischecking && isWorry)
         {
@@ -741,6 +790,11 @@ public class EnemyScript : MonoBehaviour
             wallLeft = positionBorn.x - 5;
             wallRight = positionBorn.x + 5;
 
+            detectOriginal();
+            if (originalUp || originalDown)
+            {
+                FindLadder();
+            }
         }
     }
 
@@ -775,6 +829,13 @@ public class EnemyScript : MonoBehaviour
     {
         soundOn = n;
     }
-
+    public IEnumerator Stopwalking()
+    {
+        isWalking = false;
+        anim.speed = 0;
+        yield return new WaitForSeconds(3);
+        anim.speed = 1;
+        isWalking = true;
+    }
     
 }

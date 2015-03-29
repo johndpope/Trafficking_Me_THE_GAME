@@ -10,16 +10,62 @@ public class MapManager : MonoBehaviour {
     bool openingMap;
     Dictionary<string, GameObject> mapDictionary = new Dictionary<string, GameObject>();
 
+    public GameObject objectivePoint;
+    public RectTransform objectivePointRectTransform;
+    Dictionary<int, float[]> objectiveList = new Dictionary<int, float[]>();
 
+    private GameController system;
+    private Quest currentQuest;
     // Use this for initialization
     public void openMap()
-    {     
+    {
+        system = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
         if (Application.loadedLevelName != "thirtythree")
         {
             gameObject.SetActive(true);
             mapraw.SetActive(true);
             openingMap = true;
             StartCoroutine(blinking(mapDictionary[Application.loadedLevelName]));
+
+            //objective Location
+            currentQuest = system.getCurrentQuest();
+
+            if (currentQuest.GetType() == typeof(MapQuest))
+            {
+                objectivePoint.SetActive(true);
+                MapQuest temp = (MapQuest)currentQuest;
+
+
+                objectivePointRectTransform.anchoredPosition = new Vector2(objectiveList[temp.getDestination()][0], objectiveList[temp.getDestination()][1]);
+            }
+            else
+            {
+
+                objectivePoint.SetActive(false);
+            }
+
+
+            //objectivePoint.SetActive(true);
+            //Debug.Log(objectivePointRectTransform.anchoredPosition.x + " " + objectivePointRectTransform.anchoredPosition.y);
+            //objectivePointRectTransform.anchoredPosition = new Vector2(objectiveList[2][0], objectiveList[2][1]);
+        }
+        else
+        {
+            //objective Location
+            currentQuest = system.getCurrentQuest();
+
+            if (currentQuest.GetType() == typeof(MapQuest))
+            {
+                objectivePoint.SetActive(true);
+                MapQuest temp = (MapQuest)currentQuest;
+
+
+                objectivePointRectTransform.anchoredPosition = new Vector2(objectiveList[temp.getDestination()][0], objectiveList[temp.getDestination()][1]);
+            }
+            else
+            {
+                objectivePoint.SetActive(false);
+            }
         }
     }
     public void closeMap()
@@ -30,6 +76,7 @@ public class MapManager : MonoBehaviour {
         gameObject.SetActive(false);
 
         mapraw.SetActive(false);
+        objectivePoint.SetActive(false);
         
     }
 
@@ -121,10 +168,47 @@ public class MapManager : MonoBehaviour {
         mapDictionary.Add("thirtyfive-thirtyseven", c3567);
         gameObject.SetActive(false);
 
+        objectivePoint.SetActive(false);
+
+        objectiveList.Add(0, new float[] { -39, 38.7f }); //x axis, y axis
+        objectiveList.Add(1, new float[] { -25.9f, 38.7f });
+        objectiveList.Add(2, new float[] { -1.3f, 38.7f });
+        objectiveList.Add(3, new float[] { -38.9f, 15.8f });
+        objectiveList.Add(4, new float[] { -22.2f, 15.8f });
+        objectiveList.Add(5, new float[] { -8.1f, 15.8f });
+        objectiveList.Add(6, new float[] { 6.2f, 15.8f });
+        objectiveList.Add(7, new float[] { 18.8f, 15.8f });
+        objectiveList.Add(8, new float[] { -38.6f, 1.9f });
+        objectiveList.Add(9, new float[] { -22.5f, 1.9f });
+        objectiveList.Add(10, new float[] { -8.1f, 1.9f });
+        objectiveList.Add(11, new float[] { 6.3f, 1.9f });
+        objectiveList.Add(12, new float[] { 21.8f, -2.5f });
+        objectiveList.Add(13, new float[] { 34.9f, -2.4f });
+        objectiveList.Add(14, new float[] { -41.8f, -12.1f });
+        objectiveList.Add(15, new float[] { -21.0f, -18.7f });
+        objectiveList.Add(16, new float[] { -5.2f, -18.7f });
+        objectiveList.Add(17, new float[] { 6.4f, -18.7f });
+        objectiveList.Add(18, new float[] { -18.7f, -18.7f });
+        objectiveList.Add(19, new float[] { 32.2f, -18.7f });
+        objectiveList.Add(20, new float[] { 42.8f, -22.2f });
+        objectiveList.Add(21, new float[] { -39.5f, -30.7f });
+        objectiveList.Add(22, new float[] { -23.1f, -31.2f });
+        objectiveList.Add(23, new float[] { -7.3f, -31.2f });
+        objectiveList.Add(24, new float[] { 18.3f, -31.2f });
+        objectiveList.Add(25, new float[] { 33.2f, -31.2f });
+        objectiveList.Add(26, new float[] { 40.3f, -41.6f });
+        objectiveList.Add(27, new float[] { 15.5f, -41.6f });
+        objectiveList.Add(28, new float[] { -7.3f, -41.6f });
+        objectiveList.Add(29, new float[] { -31.8f, -41.6f });
+        objectiveList.Add(30, new float[] { 35.0f, 31.1f });
+        objectiveList.Add(31, new float[] { 35.0f, 12.6f });
+        objectiveList.Add(33, new float[] { -17.6f, -8.9f });
+        objectiveList.Add(34, new float[] { -17.6f, 27.2f });
+        system = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
 	}
 }

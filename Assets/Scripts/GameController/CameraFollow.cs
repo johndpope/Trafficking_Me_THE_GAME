@@ -10,7 +10,7 @@ public class CameraFollow : MonoBehaviour {
     //public Vector2 maxXY;
 	// Use this for initialization
 	void Start () {
-	
+        target = GameObject.FindGameObjectWithTag("Player").transform;
 	}
 
     void Awake()

@@ -2,6 +2,27 @@
 using System.Collections;
 using UnityEngine.UI;
 
+public enum Storys
+{
+    prologue,
+    layerzeroone,
+    layerzerotwo,
+    layerone,
+    layeroneone,
+    layeronetwo,
+    layertwoone,
+    layertwotwo,
+    layertwothree,
+    layertwofour,
+    layerthreeone,
+    layerthreetwo,
+    layerthreethree,
+    layerthreefour,
+    substoryone,
+    substorytwo,
+    substorythree
+}
+
 public class NovelManager : MonoBehaviour {
 
 	// Use this for initialization
@@ -11,22 +32,10 @@ public class NovelManager : MonoBehaviour {
     public GameObject buttonway1;
     public GameObject buttonway2;
     private GameController system;
-    public enum Storys
-    {
-        prologue,
-        layerone,
-        layeroneone,
-        layeronetwo,
-        layertwoone,
-        layertwotwo,
-        layertwothree,
-        layertwofour,
-        layerthreeone,
-        layerthreetwo,
-        layerthreethree,
-        layerthreefour
-    }
+    
     public Storys selectStory;
+    private int subStoryAnswer;
+    public GameObject skipButton;
 	void Start () {
         Initial();
 	}
@@ -38,6 +47,10 @@ public class NovelManager : MonoBehaviour {
         if (isMission)
         {
             system.changeCurrentMission(questID);
+        }
+        else
+        {
+            subStoryAnswer = questID;
         }
         path =r;
         if (r != -1)
@@ -54,8 +67,9 @@ public class NovelManager : MonoBehaviour {
                 {
                     if (currentStory.GetHaveQuestinthelast())
                     {
-                        system.changeCurrentMission(currentStory.GetQuestMissioninLast());
+                        system.changeCurrentMission(currentStory.GetQuestMissioninLast());  
                     }
+                    system.ShowQuestMessage();
                     gameObject.SetActive(false);
                     Time.timeScale = 1;
                 }
@@ -115,7 +129,9 @@ public class NovelManager : MonoBehaviour {
     {
         switch (n)
         {
-            case Storys.prologue: currentStory = new Prologue(); break;
+            case Storys.prologue: currentStory = new Prologue(); skipButton.SetActive(true); break;
+            case Storys.layerzeroone: currentStory = new LayerZeroOne(); break;
+            case Storys.layerzerotwo: currentStory = new LayerZeroTwo(); break;
             case Storys.layerone: currentStory = new LayerOne(); break;
             case Storys.layeroneone: currentStory = new LayerOneOne(); break;
             case Storys.layeronetwo: currentStory = new LayerOneTwo(); break;
@@ -127,7 +143,21 @@ public class NovelManager : MonoBehaviour {
             case Storys.layerthreetwo: currentStory = new LayerThreeTwo(); break;
             case Storys.layerthreethree: currentStory = new LayerThreeThree(); break;
             case Storys.layerthreefour: currentStory = new LayerThreeFour(); break;
+            case Storys.substoryone: currentStory = new SubStoryOne(); break;
+            case Storys.substorytwo: currentStory = new SubStoryTwo(); break;
+            case Storys.substorythree: currentStory = new SubStoryThree(); break;
             default: currentStory = new Prologue(); break;
         }
+    }
+
+    public int getSubstoryAnswer()
+    {
+        return subStoryAnswer;
+    }
+    public void stopImeddiatel()
+    {
+        button.stopCorouVisual();
+        gameObject.SetActive(false);
+        Time.timeScale = 1;
     }
 }

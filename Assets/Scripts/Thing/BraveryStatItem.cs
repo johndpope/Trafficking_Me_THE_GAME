@@ -31,7 +31,10 @@ public class BraveryStatItem : MonoBehaviour
                 Debug.Log("corpse!!!!");
                 isFound = true;
                 player.GetComponent<CharacterEmotion>().updateStat(StatList.bravery, -1, true);
+                player.GetComponent<CharacterEmotion>().firstTimeCorpse = true;
                 system.SendMessage("FoundCorpse", true);
+
+                system.SendMessage("IsStatChange", "-1 bravery");
 
             }
         }

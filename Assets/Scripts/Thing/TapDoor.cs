@@ -16,20 +16,23 @@ public class TapDoor : MonoBehaviour {
         {
             
             Collider2D temp = Physics2D.OverlapPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            //Debug.Log("position " + Input.mousePosition + " " + Camera.main.ScreenToWorldPoint(Input.mousePosition) + " " + temp);
-
             
             if (temp != null)
             {
                 
                 if (temp.tag == "GetIn")
-                    //Debug.Log("collider name " + temp.name);
                     isEnter = true;
                 
                 
             }
         }
+
 	}
+
+    public void EnteringClick()
+    {
+        isEnter = true;
+    }
 
 
 }

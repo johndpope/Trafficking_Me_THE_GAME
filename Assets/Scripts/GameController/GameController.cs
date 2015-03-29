@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
@@ -20,7 +21,7 @@ public class GameController : MonoBehaviour {
     public string currentMap;
     public string previousMap;
 
-    private float enemyDelayTime = 1.5f; 
+    private float enemyDelayTime = 2.0f; 
     private bool enemyInActive;
 
     private int finalScore;
@@ -39,8 +40,14 @@ public class GameController : MonoBehaviour {
     private IEnumerator waitWarming;
     private bool isWarmning;
 
-    private float encouragementTime; //time use for deduct the encouragementTime
+    public float encouragementTime; //time use for deduct the encouragementTime
+    private int encouragementChangeTime = 300;
+
+    private GameObject statMsg;
+    private GameObject questMsg;
+    private smartManager smartSystem;
 	void Awake () {
+        smartSystem = new smartManager();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterEmotion>();
         questManager = new QuestManager();
         thingManager = new ThingManager();
@@ -62,6 +69,10 @@ public class GameController : MonoBehaviour {
         victimList.addMap(new int[] { 3, 14, 15, 17, 19, 21, 22, 26, 32 }, new int[] { 1, 1, 1, 1, 1, 1, 2, 1, 1 });
         victimList.randomVictim();
 
+        statMsg = GameObject.FindGameObjectWithTag("StatMessage");
+        statMsg.SetActive(false);
+        questMsg = GameObject.FindGameObjectWithTag("QuestMessage");
+        questMsg.SetActive(false);
 	}
 
     void Start()
@@ -72,7 +83,10 @@ public class GameController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Debug.Log(currentQuest.QuestID);
-        
+        if (Application.isLoadingLevel)
+        {
+            previousMap = currentMap;
+        }
         if (currentQuest.getQuestStatus() == "incomplete")
         {
             UpdateQuestStatus();
@@ -278,7 +292,13 @@ public class GameController : MonoBehaviour {
         {
             stopEnemy();
             isAlert = false;
-            
+
+            statMsg.SetActive(true);
+            statMsg.GetComponent<Text>().text = "+1 bravery";
+            StartCoroutine(ShowStatMessage(1.0f));
+
+            player.updateBraveryStat(1);
+
         }
     }
 
@@ -331,13 +351,22 @@ public class GameController : MonoBehaviour {
         float tempPersentage = 0;
         if (player.getTrustiness() <= 0) //when trustiness stat depleted, chance to find enemy increase
         {
-            if (persentage + persentageAddional >= 100)
+            int additionpercentChance = 0;
+            if (currentQuest.QuestID >= 4)
+            {
+                additionpercentChance = smartSystem.getChanceValue(currentMap);
+            }
+            else
+            {
+                additionpercentChance = 0;
+            }
+            if (persentage + persentageAddional+additionpercentChance >= 100)
             {
                 tempPersentage = 100;
             }
             else
             {
-                tempPersentage = persentageAddional + persentage;
+                tempPersentage = persentageAddional + persentage + additionpercentChance;
             }
         }
         else
@@ -480,9 +509,12 @@ public class GameController : MonoBehaviour {
 
     void OnLevelWasLoaded(int level)
     {
-        previousMap = currentMap;
+        
         currentMap = Application.loadedLevelName;
-
+        if (currentQuest.QuestID >= 4)
+        {
+            smartSystem.addanddereaseALLchanceValue(currentMap, 10, 10);
+        }
         toilet = GameObject.FindGameObjectWithTag("Toilet");
 
         RandomSummonEnemy();
@@ -514,6 +546,19 @@ public class GameController : MonoBehaviour {
                     door[i].GetComponent<DoorEnter>().isLock = false;
                     break;
                 }
+            }
+        }
+
+        //load game
+        if (Application.loadedLevelName == "thirtythree")
+        {
+            if (GameObject.FindGameObjectWithTag("boxloadgame") != null)
+            {
+                GameObject a = GameObject.FindGameObjectWithTag("PhoneCanvas");
+                a.SetActive(false);
+                a.SetActive(true);
+                boxLoading data = GameObject.FindGameObjectWithTag("boxloadgame").GetComponent<boxLoading>();
+                data.loadData();
             }
         }
         
@@ -682,12 +727,22 @@ public class GameController : MonoBehaviour {
     //summon enemy via door
     public void RandomSummonEvent()
     {
+        GameObject[] allDoor = GameObject.FindGameObjectsWithTag("Door");
 
-        StartCoroutine(DoorSoundEvent(3.0F)); 
-        StartCoroutine(DoorSoundEvent(4.0F));
-        StartCoroutine(WaitBeforeEventOccur(5.0F)); //enemy appear after 10 second
+        for (int i = 0; i < allDoor.Length; i++)
+        {
+            if (allDoor[i].GetComponent<DoorEnter>().isTriggerEvent == true && allDoor[i].GetComponent<DoorEnter>().questlevelUnlock <= currentQuest.QuestID)
+            {
+                
+                DoorEnter doorTemp = allDoor[i].GetComponent<DoorEnter>();
+                StartCoroutine(DoorSoundEvent(2.0F, doorTemp));
+                StartCoroutine(DoorSoundDisappear(3.0F, doorTemp));
+                StartCoroutine(DoorSoundEvent(4.0F, doorTemp));
+                StartCoroutine(WaitBeforeEventOccur(5.0F, doorTemp)); //enemy appear after 10 second
+                break;
+            }
+        }
 
-        
     }
 
     public void FoundCorpse(bool n)
@@ -695,38 +750,39 @@ public class GameController : MonoBehaviour {
         timeImmuneToCorpse = 30;
         immuneCorpse = n;
     }
-    
-    IEnumerator WaitBeforeEventOccur(float time)
+
+    IEnumerator WaitBeforeEventOccur(float time, DoorEnter door)
     {
 
         yield return new WaitForSeconds(time);
-
-        GameObject[] allDoor = GameObject.FindGameObjectsWithTag("Door");
-
-        for (int i = 0; i < allDoor.Length; i++)
-        {
-            if (allDoor[i].GetComponent<DoorEnter>().isTriggerEvent == true)
-            {
-
-                GameObject enemy = (GameObject)Instantiate(Resources.Load("Prefabs/Enemy"), allDoor[i].transform.position + new Vector3(0, 1, 0), Quaternion.Euler(0, 0, 0));
-                enemy.GetComponent<EnemyScript>().spawnScreen = Application.loadedLevelName;
-                enemy.GetComponent<EnemyScript>().ID = "0A";
-                allDoor[i].GetComponent<DoorEnter>().isTriggerEvent = false;
-                allDoor[i].GetComponent<DoorEnter>().isLock = false;
-            }
-        }
+        GameObject enemy = (GameObject)Instantiate(Resources.Load("Prefabs/Enemy"), door.transform.position + new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0));
+        enemy.GetComponent<EnemyScript>().spawnScreen = Application.loadedLevelName;
+        enemy.GetComponent<EnemyScript>().ID = "0A";
+        door.GetComponent<DoorEnter>().isTriggerEvent = false;
+        door.GetComponent<DoorEnter>().isLock = false;
+        door.GetComponent<DoorEnter>().knock.SetActive(false);
 
         Debug.Log("EventOccur!!!");
-        
+
     }
 
-    IEnumerator DoorSoundEvent(float time)
+    IEnumerator DoorSoundEvent(float time, DoorEnter door)
     {
         yield return new WaitForSeconds(time);
 
         Debug.Log("knock knock");
-        
+
+        door.GetComponent<DoorEnter>().knock.SetActive(true);
+
     }
+
+    IEnumerator DoorSoundDisappear(float time, DoorEnter door)
+    {
+        yield return new WaitForSeconds(time);
+        door.GetComponent<DoorEnter>().knock.SetActive(false);
+    }
+    
+  
 
     public void IncreaseWarmningLevel(float number)
     {
@@ -808,24 +864,54 @@ public class GameController : MonoBehaviour {
 
     public void DeductEncouragementStat()
     {
-        if(encouragementTime > 300){
+        if (encouragementTime > encouragementChangeTime)
+        {
             //deduct the point
+            statMsg.SetActive(true);
+            statMsg.GetComponent<Text>().text = "-1 encouragement";
             encouragementTime = 0;
+            StartCoroutine(ShowStatMessage(1.0f));
             player.updateEncouragementStat(-1);
+
         }    
+    }
+
+    //show stat message
+    public IEnumerator ShowStatMessage(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        statMsg.SetActive(false);
+    }
+
+    //pop up quest when visual novel end (change quest)
+    public void ShowQuestMessage()
+    {
+        questMsg.SetActive(true);
+        questMsg.GetComponent<Text>().text = "Quest: "+currentQuest.QuestName;
+        StartCoroutine(QuestMessageDelay(3.0f));
+    }
+
+    public IEnumerator QuestMessageDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        questMsg.SetActive(false);
+    }
+
+    public void ChangeQuestDescription(string name, string des)
+    {
+        currentQuest.setQuestName(name);
+        currentQuest.setQuestDescription(des);
     }
 
     public void SoundAttractEnemy()
     {
         GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
         
-        if (enemy != null)
+        for (int i = 0; i < enemy.Length; i++)
         {
-            for (int i = 0; i < enemy.Length; i++)
-            {
-                enemy[i].SendMessage("SetSoundAttract", true);
-            }
+            enemy[i].SendMessage("SetSoundAttract", true);
         }
+        
     }
 
     public void setScore(int n)
@@ -843,5 +929,27 @@ public class GameController : MonoBehaviour {
     public void setVictimisHelpbyID(int id, bool n)
     {
         victimList.setVictimisCollectbyID(id, n);
+    }
+
+
+    public void IsStatChange(string stat){
+
+        statMsg.SetActive(true);
+        statMsg.GetComponent<Text>().text = stat;
+        StartCoroutine(ShowStatMessage(1.0f));
+        Debug.Log(stat);
+           
+    }
+    public void setCurrentMission(Quest mission)
+    {
+        currentQuest = mission;
+    }
+    public void getALLsmartsystemvalue(out string[] n, out int[] value)
+    {
+        smartSystem.getAllChanceValue(out n, out value);
+    }
+    public void setsmartValue(string n, int value)
+    {
+        smartSystem.setChanceValue(n, value);
     }
 }

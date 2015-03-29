@@ -1,0 +1,190 @@
+fileFormatVersion: 2
+guid: a2f4ed0c4b271274ba7ad01ca498666e
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: mariadon'tmoveconfused_0
+    21300002: mariadon'tmoveconfused_1
+    21300004: mariadon'tmoveconfused_2
+    21300006: mariadon'tmoveconfused_3
+    21300008: mariadon'tmoveconfused_4
+    21300010: mariadon'tmoveconfused_5
+    21300012: mariadon'tmoveconfused_6
+    21300014: mariadon'tmoveconfused_7
+    21300016: mariadon'tmoveconfused_8
+    21300018: mariadon'tmoveconfused_9
+    21300020: mariadon'tmoveconfused_10
+    21300022: mariadon'tmoveconfused_11
+    21300024: mariadon'tmoveconfused_12
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: mariadon'tmoveconfused_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mariadon'tmoveconfused_1
+      rect:
+        serializedVersion: 2
+        x: 565
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mariadon'tmoveconfused_2
+      rect:
+        serializedVersion: 2
+        x: 1130
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mariadon'tmoveconfused_3
+      rect:
+        serializedVersion: 2
+        x: 1695
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mariadon'tmoveconfused_4
+      rect:
+        serializedVersion: 2
+        x: 2260
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mariadon'tmoveconfused_5
+      rect:
+        serializedVersion: 2
+        x: 2825
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mariadon'tmoveconfused_6
+      rect:
+        serializedVersion: 2
+        x: 3390
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mariadon'tmoveconfused_7
+      rect:
+        serializedVersion: 2
+        x: 3955
+        y: 1233
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mariadon'tmoveconfused_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mariadon'tmoveconfused_9
+      rect:
+        serializedVersion: 2
+        x: 565
+        y: 0
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mariadon'tmoveconfused_10
+      rect:
+        serializedVersion: 2
+        x: 1130
+        y: 0
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mariadon'tmoveconfused_11
+      rect:
+        serializedVersion: 2
+        x: 1695
+        y: 0
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: mariadon'tmoveconfused_12
+      rect:
+        serializedVersion: 2
+        x: 2260
+        y: 0
+        width: 565
+        height: 1233
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

@@ -38,37 +38,43 @@ public class QuestManager
         MapQuest temp = new MapQuest(0, "Find the way out", "Avoid detection and escape from this place", "incomplete", 100, 0, 2);
         temp.AddConversationMap(1, false);
         temp.AddConversationMap(3, false);
+        temp.AddConversationMap(4,false);
+        temp.AddConversationMap(5, false);
+        temp.AddConversationMap(10, false);
         questList.Add(0, temp);
 
-        //A01
-        temp = new MapQuest(1, "Help your friends", "Investigate the cell room and help your friend", "incomplete", 200, 3, 21);
-        temp.AddConversationMap(22, false);
+        temp = new MapQuest(1, "A girl is the victim", "help a girl without alert ", "incomplete", 100, 4, 4);
+        temp.AddConversationMap(3, false);
         questList.Add(1, temp);
-
-        //A02
-        temp = new MapQuest(2, "Find the useful information", "Go to the document room and find the useful information for escape",
-            "incomplete" ,100, 3, 12);
-        temp.AddConversationMap(13, false);
+        //A01
+        temp = new MapQuest(2, "Help your friends", "Investigate the cell room and help your friend", "incomplete", 200, 3, 21);
+        temp.AddConversationMap(22, false);
         questList.Add(2, temp);
 
-        //B01
-        temp = new MapQuest(3, "Contact Authority for help", "Sneak to the control room and find a way to contact authority",
-            "incomplete", 300, 0, 10);
-        temp.AddConversationMap(11, false);
+        //A02
+        temp = new MapQuest(3, "Find the useful information", "Go to the document room and find the useful information for escape",
+            "incomplete" ,100, 3, 12);
+        temp.AddConversationMap(13, false);
         questList.Add(3, temp);
 
-        //B02_1
-        temp = new MapQuest(4, "Find Amata", "Go to the destination point to see Amata", "incomplete", 100, 21, 17);
-        temp.AddConversationMap(18, false);
+        //B01
+        temp = new MapQuest(4, "Contact Authority for help", "Sneak to the control room and find a way to contact authority",
+            "incomplete", 300, 0, 10);
+        temp.AddConversationMap(11, false);
         questList.Add(4, temp);
 
-        //B02_2
-        temp = new MapQuest(5, "Searching for Amata", "Locate and find Amata", "incomplete", 100, 17, 13);
-        temp.AddConversationMap(13, false);
+        //B02_1
+        temp = new MapQuest(5, "Find Amata", "Go to the destination point to see Amata", "incomplete", 100, 21, 17);
+        temp.AddConversationMap(18, false);
         questList.Add(5, temp);
 
+        //B02_2
+        temp = new MapQuest(6, "Searching for Amata", "Locate and find Amata", "incomplete", 100, 17, 13);
+        temp.AddConversationMap(13, false);
+        questList.Add(6, temp);
+
         //B03
-        FindingQuest temp2 = new FindingQuest(6, "Sabotage trafficker shipment", "Find the item for destroy the trafficker shipment",
+        FindingQuest temp2 = new FindingQuest(7, "Sabotage trafficker shipment", "Find the item for destroy the trafficker shipment",
             "incomplete", 400, 22);
         temp2.addItemQuest(new ItemQuest(1, "wood", false, Spawn.one));
         temp2.addItemQuest(new ItemQuest(2, "wood", false, Spawn.one));
@@ -78,23 +84,26 @@ public class QuestManager
         temp2.addMap(new int[] { 5, 7, 9, 20, 24 });
         temp2.randomItems();
         temp2.AddConversationMap(23, false);
-        questList.Add(6, temp2);
+        questList.Add(7, temp2);
 
         //C01
-        temp = new MapQuest(7, "Find the exit door", "Find the exit door to escape from this place",
+        temp = new MapQuest(8, "Find the exit door", "Find the exit door to escape from this place",
             "incomplete", 200, 0, 35);
         temp.AddConversationMap(38, false);
-        questList.Add(7, temp);
+        questList.Add(8, temp);
 
         //C02
-        BossQuest temp3 = new BossQuest(8, "Fight the boss", "Go to the boss room and beat him", "incomplete", 500, 30, false);
+        BossQuest temp3 = new BossQuest(9, "Fight the boss", "Go to the boss room and beat him", "incomplete", 500, 30, false);
         temp3.AddConversationMap(30, false);
-        questList.Add(8, temp3);
+        questList.Add(9, temp3);
 
         //C03
-        temp = new MapQuest(9, "Find hiding place", "Find the room for hiding until authority arrived", "incomplete", 200, 10, 26);
+        temp = new MapQuest(10, "Find hiding place", "Find the room for hiding until authority arrived", "incomplete", 200, 10, 26);
         temp.AddConversationMap(27, false);
-        questList.Add(9, temp);
+        questList.Add(10, temp);
+
+        //A01sub1
+        
 
     }
 

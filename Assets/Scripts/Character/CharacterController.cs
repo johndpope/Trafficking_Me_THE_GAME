@@ -36,7 +36,7 @@ public class CharacterController : MonoBehaviour {
 	void Start () {
         isMove = true;
         anim = GetComponent<Animator>();
-        //moveJoystick = GameObject.FindGameObjectWithTag("Joystick").GetComponent<Joystick>();
+        moveJoystick = GameObject.FindGameObjectWithTag("Joystick").GetComponent<Joystick>();
 	}
 
     void Awake()
@@ -95,18 +95,21 @@ public class CharacterController : MonoBehaviour {
         if (isHide)
         {
             move = 0;
+            move2 = 0;
         }
 
         //when bravery stat is 0, move inverse
         if (isswapMove)
         {
             move *= swapMove;
+            move2 *= swapMove; 
             Debug.Log("move inverse na ja!!!");
         }
 
         if (!isMove)
         {
             move = 0;
+            move2 = 0;
         }
 
 

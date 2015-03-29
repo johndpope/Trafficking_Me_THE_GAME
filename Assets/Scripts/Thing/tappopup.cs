@@ -21,7 +21,10 @@ public class tappopup : MonoBehaviour {
         }
 	}
 
-    
+    public void EnteringClick()
+    {
+        isCollected = true;
+    }
 
     
     

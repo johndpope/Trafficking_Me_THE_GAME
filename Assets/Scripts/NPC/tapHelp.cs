@@ -20,6 +20,7 @@ public class tapHelp : MonoBehaviour {
                 helpStatus = true;
                 victim.collider2D.isTrigger = false;
                 victim.rigidbody2D.gravityScale = 30;
+                Destroy(victim.GetComponent<VictimScript>().cage);
             }
         }
 	}

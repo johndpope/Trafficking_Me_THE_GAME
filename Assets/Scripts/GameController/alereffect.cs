@@ -8,17 +8,33 @@ public class alereffect : MonoBehaviour {
     public GameObject alert;
 	void Start () {
         system = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
+        alert.SetActive(false);
 	}
 	
 	// Update is called once per frame
 	void LateUpdate () {
-        if (system.isAlert)
+        if (system == null)
         {
-            alert.SetActive(true);
+            system = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
         }
         else
         {
-            alert.SetActive(false);
+            if (system.isAlert)
+            {
+                alert.SetActive(true);
+            }
+            else
+            {
+                alert.SetActive(false);
+            }
         }
+        
 	}
+    /*void OnLevelWasLoaded(int level)
+    {
+        if (system == null)
+        {
+            system = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
+        }
+    }*/
 }

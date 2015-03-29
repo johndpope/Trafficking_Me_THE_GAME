@@ -10,13 +10,18 @@ public class DoorEnter : MonoBehaviour {
     public string nameSummon;
     public SceneOnLoad target;
     public GameObject getIn;
+    public GameObject locking;
     public bool isLock;
     public bool isRandomEnemy;
     public bool isTriggerEvent;
-
+    public GameObject knock;
+    public int questlevelUnlock = 0;
 	void Start () {
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<SceneOnLoad>();
         getIn.SetActive(false);
+        locking.SetActive(false);
+        knock.SetActive(false);
+
 	}
 	
 	// Update is called once per frame
@@ -26,8 +31,13 @@ public class DoorEnter : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D enter)
     {
+
         if(enter.tag == "Player" && isLock == false){
             getIn.SetActive(true);
+        }
+        else if (enter.tag == "Player" && isLock == true)
+        {
+            locking.SetActive(true);
         }
     }
 
@@ -49,7 +59,15 @@ public class DoorEnter : MonoBehaviour {
     {
         if(exit.tag == "Player"){
             getIn.SetActive(false);
+            locking.SetActive(false);
         }
     }
-    
+    void OnLevelWasLoaded(int level)
+    {
+        Quest mission = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>().getCurrentQuest();
+        if (questlevelUnlock > mission.QuestID)
+        {
+            isLock = true;
+        }
+    }
 }

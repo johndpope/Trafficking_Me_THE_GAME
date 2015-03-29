@@ -21,11 +21,11 @@ public class DoorLadder : MonoBehaviour {
         
         if (e.tag == "Player")
         {
-            if (!movingUp && player.move2 < 0)
+            if (!movingUp && player.move2 < -0.3)
             {
                 player.isClimb = true;
             }
-            else if (movingUp && player.move2 < 0)
+            else if (movingUp && player.move2 < 0.3)
             {
                 player.isClimb = false;
             }
@@ -37,12 +37,12 @@ public class DoorLadder : MonoBehaviour {
         
         if (e.tag == "Player")
         {
-            if (movingUp && player.move2 > 0)
+            if (movingUp && player.move2 > 0.3)
             {
 
                 player.isClimb = true;
             }
-            else if (!movingUp && player.move2 < 0)
+            else if (!movingUp && player.move2 < -0.3)
             {
                 player.isClimb = true;
             }

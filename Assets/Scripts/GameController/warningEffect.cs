@@ -7,6 +7,7 @@ public class warningEffect : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         system = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
+        warning.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -20,4 +21,11 @@ public class warningEffect : MonoBehaviour {
             warning.SetActive(false);
         }
 	}
+    void OnLevelWasLoaded(int level)
+    {
+        if (system == null)
+        {
+            system = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
+        }
+    }
 }

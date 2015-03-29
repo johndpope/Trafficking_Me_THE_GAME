@@ -19,6 +19,7 @@ public class PhoneManage : MonoBehaviour {
     public int documentID;
 
     private CharacterEmotion player;
+    private GameController system;
 	// Use this for initialization
 	void Start () {
          camerapage.SetActive(false);
@@ -36,6 +37,7 @@ public class PhoneManage : MonoBehaviour {
         documentID = -1;
 
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterEmotion>();
+        system = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
         
 	}
 	
@@ -53,6 +55,7 @@ public class PhoneManage : MonoBehaviour {
             docManager.collectDoc(documentID, true);
 
             player.updateEncouragementStat(1);
+            system.SendMessage("IsStatChange", "+1 trustness");
         }
         
     }
@@ -191,5 +194,15 @@ public class PhoneManage : MonoBehaviour {
                 break;
 
         }
+    }
+    public void CloseAllPage()
+    {
+        camerapage.SetActive(false);
+        messagepage.SetActive(false);
+        soundpage.SetActive(false);
+        statpage.SetActive(false);
+        mobile.SetActive(false);
+        settingpage.SetActive(false);
+        mobile.SetActive(false);
     }
 }

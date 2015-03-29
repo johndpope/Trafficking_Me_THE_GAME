@@ -5,7 +5,8 @@ using System.IO;
 using System.Text;
 using System;
 
-public class SaveLoadManager : MonoBehaviour {
+public class SaveLoadManager : MonoBehaviour
+{
 
 	// Use this for initialization
     private string filedata = "Assets/SaveData/savedata.txt";
@@ -18,9 +19,12 @@ public class SaveLoadManager : MonoBehaviour {
     private CharacterEmotion emotion;
     private PhoneManage phone;
 	void Start () {
-        system = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
-        emotion = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterEmotion>();
-        phone = GameObject.FindGameObjectWithTag("PhoneCanvas").GetComponent<PhoneCanvas>().phone;
+        if (GameObject.FindGameObjectWithTag("Player") != null)
+        {
+            system = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
+            emotion = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterEmotion>();
+            phone = GameObject.FindGameObjectWithTag("PhoneCanvas").GetComponent<PhoneCanvas>().phone;
+        }
 	}
 	
 	// Update is called once per frame
@@ -130,6 +134,32 @@ public class SaveLoadManager : MonoBehaviour {
                                 }
                                 xmlrawData[a].AppendChild(profileInnerElementroot);
                             }
+                            if (dataItems.Name == "haveConveration")
+                            {
+                                XmlElement profileInnerElementroot = xml.CreateElement("haveConveration");
+                                XmlNodeList dataContentInventory = dataItems.ChildNodes;
+                                foreach (XmlNode dataItemInventory in dataContentInventory)
+                                {
+                                    profileInnerElement = xml.CreateElement("Con");
+                                    profileInnerElement.SetAttribute("MapID", dataItemInventory.Attributes["MapID"].Value);
+                                    profileInnerElement.SetAttribute("haveCon", dataItemInventory.Attributes["haveCon"].Value);
+                                    profileInnerElementroot.AppendChild(profileInnerElement);
+                                }
+                                xmlrawData[a].AppendChild(profileInnerElementroot);
+                            }
+                            if (dataItems.Name == "smartSystem")
+                            {
+                                XmlElement profileInnerElementroot = xml.CreateElement("smartSystem");
+                                XmlNodeList dataContentInventory = dataItems.ChildNodes;
+                                foreach (XmlNode dataItemInventory in dataContentInventory)
+                                {
+                                    profileInnerElement = xml.CreateElement("smart");
+                                    profileInnerElement.SetAttribute("MapID", dataItemInventory.Attributes["MapID"].Value);
+                                    profileInnerElement.SetAttribute("value", dataItemInventory.Attributes["value"].Value);
+                                    profileInnerElementroot.AppendChild(profileInnerElement);
+                                }
+                                xmlrawData[a].AppendChild(profileInnerElementroot);
+                            }
                         }
                     }
                 }
@@ -225,6 +255,33 @@ public class SaveLoadManager : MonoBehaviour {
         }
         profileElement.AppendChild(profileInnerElement);
 
+
+        profileInnerElement = xml.CreateElement("haveConveration");
+        int[] mapIDQuest;
+        bool[] haveConQuest;
+        temp.getAllConversationMapID(out mapIDQuest,out haveConQuest);
+        for (int i = 0; i < mapIDQuest.Length; i++)
+        {
+            XmlElement elementItem = xml.CreateElement("Con");
+            elementItem.SetAttribute("MapID", mapIDQuest[i] + "");
+            elementItem.SetAttribute("haveCon", haveConQuest[i] + "");
+            profileInnerElement.AppendChild(elementItem);
+        }
+        profileElement.AppendChild(profileInnerElement);
+
+        profileInnerElement = xml.CreateElement("smartSystem");
+        string[] mapIDSmart;
+        int[] valueSmart;
+        system.getALLsmartsystemvalue(out mapIDSmart, out valueSmart);
+        for (int i = 0; i < mapIDQuest.Length; i++)
+        {
+            XmlElement elementItem = xml.CreateElement("smart");
+            elementItem.SetAttribute("MapID", mapIDSmart[i] + "");
+            elementItem.SetAttribute("value", valueSmart[i] + "");
+            profileInnerElement.AppendChild(elementItem);
+        }
+        profileElement.AppendChild(profileInnerElement);
+
         for (int i = 0; i < xmlrawData.Length; i++)
         {
             if (i != choice && xmlrawData[i] != null)
@@ -233,13 +290,18 @@ public class SaveLoadManager : MonoBehaviour {
             }
         }
         string data = xml.OuterXml;
-        File.WriteAllText(filedata, data);
+        //System.IO.File.WriteAllText(filedata, data);
+        PlayerPrefs.SetString("save", data);
+        PlayerPrefs.Save();
         xml.RemoveAll();
     }
     public void LoadData(int t)
     {
+        system = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<GameController>();
+        emotion = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterEmotion>();
+        phone = GameObject.FindGameObjectWithTag("PhoneCanvas").GetComponent<PhoneCanvas>().phone;
         XmlDocument xmlDoc = new XmlDocument();
-        xmlDoc.Load(filedata);
+        xmlDoc.LoadXml(PlayerPrefs.GetString("save"));
         XmlNodeList dataList = xmlDoc.GetElementsByTagName("profile" + t);
         string questType = "";
         foreach (XmlNode dataInfo in dataList)
@@ -268,6 +330,7 @@ public class SaveLoadManager : MonoBehaviour {
                     {
                         raw.setAllCurrentItemisCollect(int.Parse(dataItemInventory.Attributes["ID"].Value));
                     }
+                    system.setCurrentMission(raw);
                 }
                 if (dataItems.Name == "courage")
                 {
@@ -301,8 +364,31 @@ public class SaveLoadManager : MonoBehaviour {
                         phone.docManager.collectDoc(int.Parse(dataItemInventory.Attributes["ID"].Value),true);
                     }
                 }
+                if (dataItems.Name == "haveConveration")
+                {
+                    XmlNodeList dataContentInventory = dataItems.ChildNodes;
+                    Quest temps = system.getCurrentQuest();
+                    foreach (XmlNode dataItemInventory in dataContentInventory)
+                    {
+                        temps.setConversationFinish(int.Parse(dataItemInventory.Attributes["MapID"].Value),
+                            bool.Parse(dataItemInventory.Attributes["haveCon"].Value));
+                    }
+                    system.setCurrentMission(temps);
+                }
+                if (dataItems.Name == "smartSystem")
+                {
+                    XmlNodeList dataContentInventory = dataItems.ChildNodes;
+                   
+                    foreach (XmlNode dataItemInventory in dataContentInventory)
+                    {
+                        system.setsmartValue(dataItemInventory.Attributes["MapID"].Value, 
+                            int.Parse(dataItemInventory.Attributes["value"].Value));
+                    }
+                }
             }
         }
+        
+        Destroy(gameObject);
     }
     public void setChoice(int n)
     {
@@ -314,14 +400,16 @@ public class SaveLoadManager : MonoBehaviour {
     }
     public void loadtopicdata()
     {
+        topicdate = new string[4];
         XmlDocument xmlDoc = new XmlDocument();
         try
         {
-            xmlDoc.Load(filedata);
+            xmlDoc.LoadXml(PlayerPrefs.GetString("save"));
             for (int i = 0; i < 4; i++)
             {
-                if (xmlDoc.SelectNodes("profile" + i) != null)
+                if (xmlDoc.GetElementsByTagName("profile" + i) != null)
                 {
+                    
                     XmlNodeList dataList = xmlDoc.GetElementsByTagName("profile" + i);
 
                     if (dataList != null)
@@ -345,6 +433,5 @@ public class SaveLoadManager : MonoBehaviour {
         {
             //do nothing
         }
-
     }
 }

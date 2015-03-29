@@ -13,7 +13,7 @@ public class CharacterDetail {
     {
         braveryStat = 3;
         encouragementStat = 3;
-        trustinessStat = 1;
+        trustinessStat = 3;
     }
 
     public void setBraveryStat(int braveryStat)

@@ -119,14 +119,14 @@ public class FindingQuest : Quest
 
             }
         }
-        foreach (KeyValuePair<int, List<ItemQuest>> pair in objectiveLocation)
+        /*foreach (KeyValuePair<int, List<ItemQuest>> pair in objectiveLocation)
         {
 
             for (int i = 0; i < pair.Value.Count; i++)
             {
                 Debug.Log(pair.Key + " " + pair.Value[i].getItemID() + " " + pair.Value[i].getPositions());
             }
-        }
+        }*/
     }
     public void setIsCollect(int mapID, Spawn position)
     {

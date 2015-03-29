@@ -19,8 +19,11 @@ public class CharacterEmotion : MonoBehaviour {
     public float stopMoveCoundownE = 4;
     private float currentTimeE;
 
+    public bool firstTimeCorpse;
+
     public bool isStun;
     public bool isStunE;
+    public Animator ani;
 
 	// Use this for initialization
     
@@ -28,6 +31,7 @@ public class CharacterEmotion : MonoBehaviour {
     {
         player = GetComponent<CharacterController>();
         characterDetail = new CharacterDetail();
+        ani = GetComponent<Animator>();
         currentTime = maxNormalCoundown;
         currentTimeE = maxNormalCoundownE;
 	}
@@ -35,17 +39,35 @@ public class CharacterEmotion : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //first time stun bravery
-        if (player.isMove && isStun && characterDetail.getBraveryStat() == 0)
+        if (isStun || isStunE)
+        {
+            ani.SetBool("scared", true);
+        }
+        else
+        {
+            ani.SetBool("scared", false);
+        }
+        if (player.isswapMove)
+        {
+            ani.SetBool("confuse", true);
+        }
+        else
+        {
+            ani.SetBool("confuse", false);
+        }
+        
+        if (player.isMove && isStun && firstTimeCorpse)
         {
             currentTime = stopMoveCoundown;
             player.isMove = false;
 
         }
         //end of stun
-        if (currentTime < 0 && !player.isMove && characterDetail.getBraveryStat() == 0)
+        if (currentTime < 0 && !player.isMove && firstTimeCorpse)
         {
             isStun = false;
             player.isMove = true;
+            firstTimeCorpse = false;
         }
 
         //move inverse

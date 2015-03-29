@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{08BC61E3-D45E-5110-6BA4-B13CF2EFBAEB}</ProjectGuid>
+	<ProjectGuid>{E45F64F7-7425-14B5-5E13-0B4AD682EDE9}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\Character\SceneOnLoad.cs" />
      <Compile Include="Assets\Scripts\GameController\BossQuest.cs" />
      <Compile Include="Assets\Scripts\GameController\CameraFollow.cs" />
+     <Compile Include="Assets\Scripts\GameController\EnteringManager.cs" />
      <Compile Include="Assets\Scripts\GameController\EventHanding.cs" />
      <Compile Include="Assets\Scripts\GameController\FindingQuest.cs" />
      <Compile Include="Assets\Scripts\GameController\GameController.cs" />
@@ -66,16 +67,20 @@
      <Compile Include="Assets\Scripts\GameController\changeTextRun.cs" />
      <Compile Include="Assets\Scripts\GameController\warningEffect.cs" />
      <Compile Include="Assets\Scripts\Map\MapManager.cs" />
+     <Compile Include="Assets\Scripts\Menugame\ChangingWindow.cs" />
+     <Compile Include="Assets\Scripts\Menugame\Loading_Screen.cs" />
      <Compile Include="Assets\Scripts\NPC\BossScript.cs" />
      <Compile Include="Assets\Scripts\NPC\DogScript.cs" />
      <Compile Include="Assets\Scripts\NPC\EnemyScript.cs" />
      <Compile Include="Assets\Scripts\NPC\SpawnBoss.cs" />
      <Compile Include="Assets\Scripts\NPC\SpawnScript.cs" />
      <Compile Include="Assets\Scripts\NPC\SpawnVictim.cs" />
+     <Compile Include="Assets\Scripts\NPC\TalkTrigger.cs" />
      <Compile Include="Assets\Scripts\NPC\Victim.cs" />
      <Compile Include="Assets\Scripts\NPC\VictimList.cs" />
      <Compile Include="Assets\Scripts\NPC\VictimScript.cs" />
      <Compile Include="Assets\Scripts\NPC\tapHelp.cs" />
+     <Compile Include="Assets\Scripts\NPC\tapTalk.cs" />
      <Compile Include="Assets\Scripts\Phone\DocManager.cs" />
      <Compile Include="Assets\Scripts\Phone\MissionDetail.cs" />
      <Compile Include="Assets\Scripts\Phone\PhoneCanvas.cs" />
@@ -86,6 +91,7 @@
      <Compile Include="Assets\Scripts\Phone\StatusBar.cs" />
      <Compile Include="Assets\Scripts\Saveloadgame\ClickSaveLoad.cs" />
      <Compile Include="Assets\Scripts\Saveloadgame\SaveLoadManager.cs" />
+     <Compile Include="Assets\Scripts\Saveloadgame\boxLoading.cs" />
      <Compile Include="Assets\Scripts\Thing\BraveryStatItem.cs" />
      <Compile Include="Assets\Scripts\Thing\Document.cs" />
      <Compile Include="Assets\Scripts\Thing\DocumentEnter.cs" />
@@ -106,6 +112,9 @@
      <Compile Include="Assets\Scripts\Thing\locker.cs" />
      <Compile Include="Assets\Scripts\Thing\taplocker.cs" />
      <Compile Include="Assets\Scripts\Thing\tappopup.cs" />
+     <Compile Include="Assets\Scripts\Tutorial\Tutorial.cs" />
+     <Compile Include="Assets\Scripts\Tutorial\checkTutorial.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\CheckIntroStory.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\ImageController.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\LayerOne.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\LayerOneOne.cs" />
@@ -118,15 +127,22 @@
      <Compile Include="Assets\Scripts\VisualNovel\LayerTwoOne.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\LayerTwoThree.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\LayerTwoTwo.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\LayerZeroOne.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\LayerZeroTwo.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\NovelManager.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\Prologue.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\Story.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\StoryDependent.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\SubStoryOne.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\SubStoryThree.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\SubStoryTwo.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\VisualNovel.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\checkStory.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\checkStoryByClick.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\checkStoryTypeTwo.cs" />
+     <Compile Include="Assets\Scripts\VisualNovel\checkchangeDes.cs" />
      <Compile Include="Assets\Scripts\VisualNovel\soundVisual.cs" />
-     <None Include="Assets\SaveData\savedata.txt" />
+     <Compile Include="Assets\Scripts\smartManager\smartManager.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.2/UnityEngine.UI.dll</HintPath>
  </Reference>

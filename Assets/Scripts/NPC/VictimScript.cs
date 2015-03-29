@@ -34,10 +34,18 @@ public class VictimScript : MonoBehaviour {
     public int ID;
     public int mapID;
     public SpawnV position;
+    public GameObject cage;
     GameController gameController;
 
     private GameObject[] allEnemy;
     private GameObject[] allDog;
+
+    public TalkTrigger talkTrigger;
+    public tapTalk talkPopup;
+
+    private GameObject visualNovel;
+    private Storys[] storys = new Storys[] { Storys.substoryone, Storys.substorytwo, Storys.substorythree };
+    private bool subStoryAction;
 
 	void Start () {
         anim = GetComponent<Animator>();
@@ -59,12 +67,34 @@ public class VictimScript : MonoBehaviour {
 
         allEnemy = GameObject.FindGameObjectsWithTag("Enemy");
         allDog = GameObject.FindGameObjectsWithTag("Dog");
+
+        talkPopup.gameObject.SetActive(false);
+
 	}
-	
+
+
 	// Update is called once per frame
 	void FixedUpdate () {
         if (popup.helpStatus)
         {
+            //talk part
+            if(talkTrigger.trigger && talkPopup.firstTime){
+                talkPopup.gameObject.SetActive(true);
+            }
+            else
+            {
+                talkPopup.gameObject.SetActive(false);
+            }
+
+            if(talkPopup.isTalk){
+                visualNovel.SetActive(true);
+                talkPopup.isTalk = false;
+            }
+            
+            //end talk part
+
+            DontDestroyOnLoad(gameObject);
+
             if(isClimb){
                 anim.SetBool("climbing",true);
             }
@@ -76,8 +106,6 @@ public class VictimScript : MonoBehaviour {
             gameController.SetHelpVictim(mapID, position);
 
             popup.gameObject.SetActive(false);
-
-            DontDestroyOnLoad(gameObject);
 
             isinsideLadder = Physics2D.OverlapCircle(ground.position, radiusGround, whatisLadder);
 
@@ -115,18 +143,27 @@ public class VictimScript : MonoBehaviour {
             DetectPlayerUp();
             DetectPlayerDown();
             MoveToPlayer();
-
-            
         }
 	}
-
+    void Update()
+    {
+        //take action to victim when substory visual novel end
+        if (Time.timeScale == 1 && visualNovel.activeSelf == false && talkPopup.firstTime == false && !subStoryAction)
+        {
+            subStoryAction = true;
+            setVictim();
+        }
+    }
     void OnTriggerEnter2D(Collider2D enter)
     {
-        if (enter.tag == "Player")
+        if (enter.tag == "Player" && !popup.helpStatus)
         {
             popup.gameObject.SetActive(true);
             
         }
+
+        
+
         if (enter.tag == "mouth")
         {
 
@@ -195,6 +232,8 @@ public class VictimScript : MonoBehaviour {
             Destroy(gameObject);
             player.GetComponent<CharacterEmotion>().updateTrustnessStat(-1);
             gameController.SetHelpVictimFail(mapID, ID);
+
+            gameController.SendMessage("IsStatChange", "-1 trustness");
         }
     } 
 
@@ -430,9 +469,53 @@ public class VictimScript : MonoBehaviour {
         if(Application.loadedLevelName == "thirtythree"){
             player.GetComponent<CharacterEmotion>().updateTrustnessStat(1);
             player.GetComponent<CharacterEmotion>().updateBraveryStat(1);
-            Destroy(gameObject);
-            Debug.Log("help successful");
+
+            gameController.SendMessage("IsStatChange", "+1 bravery");
+            StartCoroutine(DelaySendStat(0.5f));
+
         }
     }
-    
+
+    IEnumerator DelaySendStat(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        gameController.SendMessage("IsStatChange", "+1 trustness");
+
+        Destroy(gameObject);
+        Debug.Log("help successful");
+    }
+
+    public void SetVisual(GameObject visual)
+    {
+        visualNovel = visual;
+        int random = Random.Range(0, storys.Length);
+        visualNovel.GetComponent<NovelManager>().SetStory(storys[random]);
+        visualNovel.GetComponent<NovelManager>().selectStory = storys[random];
+        DontDestroyOnLoad(visualNovel);
+    }
+
+    //victim event from sub story answer
+    public void setVictim()
+    {
+        //Debug.Log(visualNovel.GetComponent<NovelManager>().getSubstoryAnswer());
+        switch (visualNovel.GetComponent<NovelManager>().getSubstoryAnswer())
+        {
+            case 101:
+                player.GetComponent<CharacterEmotion>().updateTrustnessStat(1);
+                Debug.Log("correct answer");
+                break;
+            case 102:
+                player.GetComponent<CharacterEmotion>().updateTrustnessStat(-1);
+                Destroy(gameObject);
+                GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+                for(int i = 0; i < enemy.Length; i++){
+                    enemy[i].GetComponent<EnemyScript>().isAttackEnemy = true;
+                }
+                Debug.Log("wrong answer!!!");
+                break;
+            default:
+                Debug.Log("nothing happen");
+                break;
+        }
+    }
 }

@@ -36,14 +36,24 @@ public class Quest {
 
     public string QuestName
     {
-        set {  this.questName = QuestName; }
-        get {  return this.questName; }
+        set { this.questName = QuestName; }
+        get { return this.questName; }
+    }
+
+    public void setQuestName(string questName)
+    {
+        this.questName = questName;
     }
 
     public string QuestDescription
     {
-        set {  this.questDescription = QuestDescription; }
-        get { return this.questDescription;  }
+        set { this.questDescription = QuestDescription; }
+        get { return this.questDescription; }
+    }
+
+    public void setQuestDescription(string questDescription)
+    {
+        this.questDescription = questDescription;
     }
 
     public void setQuestStatus(string questStatus)
@@ -96,5 +106,17 @@ public class Quest {
             result = false;
         }
         return result;
+    }
+    public void getAllConversationMapID(out int[] mapID, out bool[] haveCon)
+    {
+        List<int> mapIDtemp = new List<int>();
+        List<bool> haveContemp = new List<bool>();
+        foreach (KeyValuePair<int, bool> pair in conversationMapID)
+        {
+            mapIDtemp.Add(pair.Key);
+            haveContemp.Add(pair.Value);
+        }
+        mapID = mapIDtemp.ToArray();
+        haveCon = haveContemp.ToArray();
     }
 }

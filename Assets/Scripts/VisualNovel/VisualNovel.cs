@@ -12,6 +12,7 @@ public class VisualNovel : MonoBehaviour {
     public int[] emotionChoose;
     public Text display;
     public Text NameDisplay;
+    private IEnumerator runText;
    // public Image target;
     private ImageController imageCon;
     private soundVisual soundEffect;
@@ -19,6 +20,7 @@ public class VisualNovel : MonoBehaviour {
         currentText = "";
         imageCon = GetComponent<ImageController>();
         soundEffect = GetComponent<soundVisual>();
+        runText = scollingText();
 	}
 	
 	// Update is called once per frame
@@ -32,8 +34,9 @@ public class VisualNovel : MonoBehaviour {
             imageCon.UpdateRender(currentnumberText);
             soundEffect.UpdateSound(currentnumberText); 
             NameDisplay.text = nameChar[currentnumberText];
-            StopCoroutine(scollingText());
-            StartCoroutine(scollingText());
+            StopCoroutine(runText);
+            runText = scollingText();
+            StartCoroutine(runText);
             currentnumberText++;
             
         }
@@ -66,9 +69,14 @@ public class VisualNovel : MonoBehaviour {
         NameDisplay.text = nameChar[currentnumberText];
         imageCon.UpdateRender(currentnumberText);
         soundEffect.UpdateSound(currentnumberText);
-        StopCoroutine(scollingText());
-        StartCoroutine(scollingText());
+        StopCoroutine(runText);
+        runText = scollingText();
+        StartCoroutine(runText);
         currentnumberText = 1;
 
+    }
+    public void stopCorouVisual()
+    {
+        StopCoroutine(runText);
     }
 }

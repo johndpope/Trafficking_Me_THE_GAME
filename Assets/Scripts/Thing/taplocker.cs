@@ -27,4 +27,10 @@ public class taplocker : MonoBehaviour {
 
         }
     }
+
+    public void EnteringClick()
+    {
+        inLocker = !inLocker;
+        oppositeTap.inLocker = inLocker;
+    }
 }

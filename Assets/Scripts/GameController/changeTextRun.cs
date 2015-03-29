@@ -11,6 +11,7 @@ public class changeTextRun : MonoBehaviour {
 	}
     public void changeText()
     {
+        controller.changeRun();
         if (controller.getRun())
         {
             text.text = "Walk";
